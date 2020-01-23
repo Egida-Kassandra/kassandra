@@ -8,16 +8,8 @@ dict_ref_url = {}
 dict_user_agent = {}
 
 
-def parse_single_game(str_game):
-    str_game = str_game.strip('[]')
-    game = str_game.split(',')
-    game_int = []
-    for num in game:
-        game_int.append(int(num))
-    return game_int
-
-
-def parse_file(filename, array_data, array_labels):
+def parse_file(filename, array_data):
+    lines_number = 60000
     f = open(filename, "r")
     single_data = []
     for line in f:
@@ -70,7 +62,11 @@ def parse_file(filename, array_data, array_labels):
 
         array_data.append(single_data)
         single_data = []
+        --lines_number
+        if lines_number == 0:
+            break
     f.close()
+    #return array_data
 
 
 def parse_str_to_dict(dictionary, word):
@@ -80,8 +76,9 @@ def parse_str_to_dict(dictionary, word):
         dictionary[word] = len(dictionary)
         return dictionary[word]
 
-
+"""
 train_data = []
 train_labels = []
-parse_file('fool.log', train_data, train_labels)
+parse_file('fool.log', train_data)
 print(train_data)
+"""

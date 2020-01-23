@@ -5,6 +5,8 @@ import tensorflow as tf
 from keras.utils.np_utils import to_categorical
 import json
 import os.path
+import parse_logs
+
 
 # GPU configuration
 config = tf.compat.v1.ConfigProto(gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8))
@@ -26,7 +28,9 @@ my_path = os.path.abspath(os.path.dirname(__file__))
 path = os.path.join(my_path, "data\huge_games.json")
 train_data = []
 train_labels = []
-parse_file_json(path, train_data, train_labels) # Load training data
+
+parse_logs.parse_file('access1.log', train_data)
+#parse_file_json(path, train_data, train_labels) # Load training data
 train_data = np.array(train_data)
 train_labels = np.array(train_labels)
 
@@ -86,11 +90,11 @@ history = model.fit(partial_x_train,partial_y_train,epochs=40,batch_size=512,val
 
 # Save model to file
 
-model.save('modeljson_norand.h5')  # Uncomment when layer configuration is defined
+#model.save('modeljson_norand.h5')  # Uncomment when layer configuration is defined
 
 # Monitoring loss and accuracy while training
 # Uncomment while testing the configuration
-"""
+
 import matplotlib.pyplot as plt
 loss = history.history['loss']
 val_loss = history.history['val_loss']
@@ -102,6 +106,7 @@ plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.legend()
 plt.show()
+
 plt.clf()
 acc = history.history['accuracy']
 val_acc = history.history['val_accuracy']
@@ -112,4 +117,3 @@ plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.legend()
 plt.show()
-"""
