@@ -29,7 +29,7 @@ path = os.path.join(my_path, "data\huge_games.json")
 train_data = []
 train_labels = []
 
-parse_logs.parse_file('access1.log', train_data)
+train_data = parse_logs.parse_file('fool.log', train_data)
 #parse_file_json(path, train_data, train_labels) # Load training data
 train_data = np.array(train_data)
 train_labels = np.array(train_labels)

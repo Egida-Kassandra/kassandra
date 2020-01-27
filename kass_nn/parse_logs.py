@@ -12,7 +12,7 @@ dict_ref_url = {}
 dict_user_agent = {}
 
 
-def parse_file(filename, array_data):
+def parse_file(filename):
     lines_number = 60000
     lines = open(filename).read().splitlines()
     pool = Pool(16)
@@ -86,9 +86,10 @@ def parse_str_to_dict(dictionary, word):
         dictionary[word] = len(dictionary)
         return dictionary[word]
 
-
+"""
 if __name__ == '__main__':
     train_data = []
     train_labels = []
-    train_data = parse_file('access_news.log', train_data)
+    train_data = parse_file('access_news.log')
     print(len(train_data))
+    """
