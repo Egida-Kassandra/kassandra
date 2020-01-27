@@ -1,4 +1,5 @@
 from dateutil.parser import parse
+from multiprocessing import Pool
 import numpy as np
 dict_ip = {}
 dict_req_meth = {}
@@ -10,10 +11,21 @@ dict_user_agent = {}
 
 def parse_file(filename, array_data):
     lines_number = 60000
-    f = open(filename, "r")
-    single_data = []
-    for line in f:
+    lines = open(filename).read().splitlines()
+    pool = Pool()
+    result = pool.map(parse_line, lines)
+    pool.close()
+    pool.join()
+    result = [r for r in result if r is not None]
 
+    return result
+
+
+def parse_line(line):
+    single_data = []
+    if len(line) == 0:
+        return None
+    try:
         line = line.strip()
         ## IP ##
         str_line = line.split(' - - ')
@@ -42,7 +54,6 @@ def parse_file(filename, array_data):
         single_data.append(parse_str_to_dict(dict_req_url, url))
         single_data.append(parse_str_to_dict(dict_req_protocol, protocol))
 
-
         ## Status code and bytes ##
         status_code_and_bytes = str_line[1].split("\"")[2].strip().split(" ")
         status_code = status_code_and_bytes[0]
@@ -60,13 +71,10 @@ def parse_file(filename, array_data):
         user_agent = str_line[1].split("\"")[5]
         single_data.append(parse_str_to_dict(dict_user_agent, user_agent))
 
-        array_data.append(single_data)
-        single_data = []
-        --lines_number
-        if lines_number == 0:
-            break
-    f.close()
-    #return array_data
+    except IndexError:
+        print("fuck it")
+        return None
+    return single_data
 
 
 def parse_str_to_dict(dictionary, word):
@@ -76,9 +84,9 @@ def parse_str_to_dict(dictionary, word):
         dictionary[word] = len(dictionary)
         return dictionary[word]
 
-"""
-train_data = []
-train_labels = []
-parse_file('fool.log', train_data)
-print(train_data)
-"""
+
+if __name__ == '__main__':
+    train_data = []
+    train_labels = []
+    train_data = parse_file('fool.log', train_data)
+    print(len(train_data))
