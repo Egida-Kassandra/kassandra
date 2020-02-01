@@ -2,36 +2,52 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.font_manager
 from sklearn import svm
-import parse_logs
+from parse_logs import LogParser
+import pandas as pd
+
 
 from sklearn.ensemble import IsolationForest
 if __name__ == '__main__':
     rng = np.random.RandomState(42)
 
     # Generate train data
-    data = parse_logs.parse_file('access_news.log')
-    data_test = data[530000:]
-    data = np.array(data)
+    logpar = LogParser()
+    data_train = logpar.parse_file('fool_loop', True)
+    data_test = logpar.parse_file('testdata', False)
+    #print(data_test)
+    data_pandas = pd.DataFrame(data_train)[[0,7]]
+    print(data_pandas)
+
+    datatest_pandas = pd.DataFrame(data_test)[[0, 7]]
+    print(datatest_pandas)
+    data = np.array(data_train)
+    data_test = np.array(data_test)
     print(data.shape)
-    X_train = np.array(data[:530000])
+    print(data_test.shape)
+    #print(data)
+
+    X_train = np.array(data_pandas)
     #X_train.reshape(-1, 1)
     # Generate some regular novel observations
 
     #X_test = np.array(data[531460:])
     #data_test = parse_logs.parse_file('fool2.log')
     #data_test = data[:531469]
-    X_test = np.array(data_test)
+    X_test = np.array(datatest_pandas)
     # Generate some abnormal novel observations
 
     #X_outliers = np.array(data[len(data)-1])
     #X_outliers = X_outliers.reshape(1, -1)
 
     # fit the model
-    clf = IsolationForest(n_estimators=100, max_samples=256, contamination=0.2, random_state=rng)
-    clf.fit(X_train)
-    scores = clf.decision_function(X_test)
+    clf = IsolationForest(n_estimators=4000, max_samples=3000, contamination=0.03, random_state=0) #0.04
+    clf.fit(data_pandas)
+    scores = clf.decision_function(datatest_pandas)
     print(scores)
-    print(clf.predict(X_test))
+    prediction = clf.predict(datatest_pandas)
+    print(prediction)
+    count = sum(map(lambda x: x < 0, prediction))
+    print('anomalies: ', count)
     """
     isoF_outliers_values = X_test[clf.predict(X_test) == -1]
     isoF_outliers_values = isoF_outliers_values.tolist()
@@ -40,8 +56,8 @@ if __name__ == '__main__':
             print(data_test.index(i))
     print(isoF_outliers_values)
     """
-    plt.figure(figsize=(12, 8))
-    plt.hist(scores, bins=50)
+    plt.figure(figsize=(12, 6))
+    plt.hist(scores, bins=500)
     plt.show()
     """
     y_pred_train = clf.predict(X_train)
