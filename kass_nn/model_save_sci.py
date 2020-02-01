@@ -4,7 +4,7 @@ import matplotlib.font_manager
 from sklearn import svm
 from parse_logs import LogParser
 import pandas as pd
-
+import time
 
 from sklearn.ensemble import IsolationForest
 if __name__ == '__main__':
@@ -12,11 +12,11 @@ if __name__ == '__main__':
 
     # Generate train data
     logpar = LogParser()
-    data_train = logpar.parse_file('fool_loop', True)
-    data_test = logpar.parse_file('testdata', False)
+    data_train = logpar.parse_file('access_news.log', True)
+    data_test = logpar.parse_file('testdata.log', False)
     #print(data_test)
     data_pandas = pd.DataFrame(data_train)[[0,7]]
-    print(data_pandas)
+    #print(data_pandas)
 
     datatest_pandas = pd.DataFrame(data_test)[[0, 7]]
     print(datatest_pandas)
@@ -40,11 +40,20 @@ if __name__ == '__main__':
     #X_outliers = X_outliers.reshape(1, -1)
 
     # fit the model
-    clf = IsolationForest(n_estimators=4000, max_samples=3000, contamination=0.03, random_state=0) #0.04
+    clf = IsolationForest(n_estimators=500, max_samples=1000, contamination=0.03, random_state=0) #0.04
     clf.fit(data_pandas)
+    print("DECISION FUNCTION")
+    start = time.time()
     scores = clf.decision_function(datatest_pandas)
+    end = time.time()
+    print(end - start)
     print(scores)
+
+    print("PREDICT")
+    start = time.time()
     prediction = clf.predict(datatest_pandas)
+    end = time.time()
+    print(end - start)
     print(prediction)
     count = sum(map(lambda x: x < 0, prediction))
     print('anomalies: ', count)

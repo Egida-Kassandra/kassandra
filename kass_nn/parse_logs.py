@@ -15,8 +15,8 @@ class LogParser:
         self.dict_req_protocol = {}
         self.dict_ref_url = {}
         self.dict_user_agent = {}
-        self.weights_train = [1,10,1,1,1,1]
-        self.weights_test = [10000000000,10,1,1,1,1]
+        self.weights_train = [1,1,1,1,1,1]
+        self.weights_test = [1,1,1,1,1,1]
         #weights = []
 
 
