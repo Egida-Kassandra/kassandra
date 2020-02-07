@@ -15,8 +15,9 @@ class LogParser:
         self.dict_req_protocol = {}
         self.dict_ref_url = {}
         self.dict_user_agent = {}
-        self.weights_train = [1,1,1,1,1,1]
-        self.weights_test = [1,1,1,1,1,1]
+        self.dict_status_code = {}
+        self.weights_train = [1,1,1,1,1,1,1]
+        self.weights_test = [1000,1,1,1,10,1,1]
         #weights = []
 
 
@@ -65,6 +66,7 @@ class LogParser:
             #request = str_line[1].split("\"")[1]
             #request = request.split(" ")
             request = re.split('" | "| ', str_line[1])
+            request = [r for r in request if r is not '']
             method = request[2]
             url = request[3]
             protocol = request[4]
@@ -83,20 +85,22 @@ class LogParser:
             bytes_transf = request[6]
             if bytes_transf == '-':
                 bytes_transf = 0
-            single_data.append(int(status_code))
+            self.parse_str_to_dict(self.dict_status_code, status_code, weights[4])
+            single_data.append(self.dict_status_code[status_code])
             single_data.append(int(bytes_transf))
             ## Referrer URL ##
             ref_url = str_line[1].split("\"")[3]
-            self.parse_str_to_dict(self.dict_ref_url, ref_url, weights[4])
+            self.parse_str_to_dict(self.dict_ref_url, ref_url, weights[5])
             single_data.append(self.dict_ref_url[ref_url])
             ## User agent ##
             user_agent = str_line[1].split("\"")[5]
-            self.parse_str_to_dict(self.dict_user_agent, user_agent, weights[5])
+            self.parse_str_to_dict(self.dict_user_agent, user_agent, weights[6])
             single_data.append(self.dict_user_agent[user_agent])
             #print(dict_req_meth)
         except Exception as e:
             print(e)
             print("fuck this line: ", line)
+            print(protocol)
             return None
         return single_data
 

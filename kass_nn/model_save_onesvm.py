@@ -6,6 +6,7 @@ from parse_logs import LogParser
 import pandas as pd
 import time
 import pickle
+from sklearn.svm import OneClassSVM
 # https://stackabuse.com/scikit-learn-save-and-restore-models/
 
 from sklearn.ensemble import IsolationForest
@@ -44,58 +45,34 @@ if __name__ == '__main__':
     #X_outliers = X_outliers.reshape(1, -1)
 
     # fit the model
-    # necesario parametrizar el threshold, depende del dominio
-    # para news: 0.03
-    #clf = IsolationForest(n_estimators=500, max_samples=1000, contamination=0.03, random_state=0)
-    # para tramsilverio: 0.005
-    #clf = IsolationForest(n_estimators=37680, max_samples=512, contamination=0.01, random_state=0)
-    #clf = IsolationForest(n_estimators=10000, max_samples=37680, contamination=0.01, random_state=rng, max_features=2, n_jobs=4)
-    clf = IsolationForest(n_estimators=2000, max_samples=37679, contamination=0.016, random_state=rng, max_features=4,
-                          n_jobs=-1)
-    # access1
-    # dict ip= 1663 -> si
-    # 1732 -> anomalia
-    # 1703,1702,1701 -> anomalia
-    # 1700 -> anomalia
-    # 1698 -> anomalia
 
-    # linea 34k -> si
-    # 34228 -> si
-    # 34689 -> si
-    # 34700 -> si
-    # 34780 -> si
-    # 34800 -> si
-    # 34810 -> si
-    # 34814 -> si
-    # 34815 -> si
-    # 34816 -> anom
-    # 34818 -> anom
-    # 34820 -> anom
-    # 34821 -> anom
-    # 34822 -> anom
-    # 34823 -> anom
-    # 34824 -> anom
-    # 34825 -> anom
-    # 34826 -> anom
-    clf.fit(data_pandas)
+    svm = OneClassSVM(kernel='rbf', nu=0.1, tol=0.2, gamma=0.001)
+
+    svm.fit(data_pandas)
     print("DECISION FUNCTION")
     start = time.time()
-    scores = clf.decision_function(datatest_pandas)
+    scores = svm.decision_function(datatest_pandas)
     end = time.time()
     print(end - start)
     print(scores)
 
     print("PREDICT")
     start = time.time()
-    prediction = clf.predict(datatest_pandas)
+    prediction = svm.predict(datatest_pandas)
     end = time.time()
     print(end - start)
     print(prediction)
     count = sum(map(lambda x: x < 0, prediction))
     print('anomalies: ', count)
+    prediction = svm.score_samples(datatest_pandas)
+    print(prediction)
+    count = sum(map(lambda x: x < 0, prediction))
+    print('anomalies: ', count)
     pkl_filename = "pickle_model.pkl"
     with open(pkl_filename, 'wb') as file:
-        pickle.dump(clf, file)
+        pickle.dump(svm, file)
+
+    # https://s3.amazonaws.com/assets.datacamp.com/production/course_13198/slides/chapter4.pdf
     """
     isoF_outliers_values = X_test[clf.predict(X_test) == -1]
     isoF_outliers_values = isoF_outliers_values.tolist()
