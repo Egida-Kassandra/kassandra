@@ -1,2 +1,3 @@
 venv/
 .idea/
+kass_nn/__pycache__/
