@@ -6,7 +6,9 @@ from parse_logs import LogParser
 import pandas as pd
 import time
 import pickle
-import eif as iso
+#import eif as iso
+#from eif_old import iForest as iso
+import eif_old as iso
 # https://stackabuse.com/scikit-learn-save-and-restore-models/
 
 from sklearn.ensemble import IsolationForest
@@ -15,10 +17,10 @@ if __name__ == '__main__':
 
     # Generate train data
     logpar = LogParser()
-    data_train = logpar.parse_file('access3_features.log', True)
+    data_train = logpar.parse_file('access_news.log', True)
    # print(data_train[34750]) # line
     print('========================================================')
-    data_test = logpar.parse_file('testdata3.log', False)
+    data_test = logpar.parse_file('news_test.txt', False)
     #print(data_test)
     data_pandas = pd.DataFrame(data_train)[[0,1,2,3,4]]
     #print(data_pandas)
