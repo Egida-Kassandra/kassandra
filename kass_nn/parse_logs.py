@@ -63,6 +63,8 @@ class LogParser:
         if len(line) == 0:
             return None
         try:
+            if not is_train:
+                print(line)
             line = line.strip()
             ## IP ##
             str_line = line.split(' - - ')

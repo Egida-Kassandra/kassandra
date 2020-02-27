@@ -16,7 +16,6 @@
 125.39.78.183 - - [10/Nov/2011:03:23:07 +0000] "GET /libs/panels.css HTTP/1.1" 200 911 "-" "Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)"
 125.39.78.189 - - [30/Apr/2012:16:24:58 +0100] "GET /construcao.jpg HTTP/1.1" 200 3627 "http://transmsilverio.com/" "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.162 Safari/535.19"
 125.39.78.184 - - [30/Apr/2012:12:06:08 +0100] "GET /index_es.php HTTP/1.1" 200 4716 "-" "Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)"
-
 123.125.67.136 - - [10/Nov/2011:03:22:17 +0000] "GET /libs/defaults.css HTTP/1.1" 500 661 "-" "Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)"
 207.44.204.87 - - [31/May/2010:14:35:45 +0100] "GET /wp-login.php HTTP/1.1" 200 274 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
 10.10.10.10 - - [31/May/2010:05:56:02 +0100] "GET /peligro HTTP/1.0" 403 323 "-" "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; YPC 3.2.0; FunWebProducts; .NET CLR 1.1.4322; PeoplePal 3.0)"

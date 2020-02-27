@@ -20,10 +20,10 @@ if __name__ == '__main__':
     print('========================================================')
     data_test = logpar.parse_file('testdata3.log', False)
     #print(data_test)
-    data_pandas = pd.DataFrame(data_train)[[0,1,2]]
+    data_pandas = pd.DataFrame(data_train)[[0,1,2,3,4]]
     #print(data_pandas)
 
-    datatest_pandas = pd.DataFrame(data_test)[[0,1,2]]
+    datatest_pandas = pd.DataFrame(data_test)[[0,1,2,3,4]]
     #print(datatest_pandas)
     data = np.array(data_train)
     data_test = np.array(data_test)
@@ -102,7 +102,7 @@ if __name__ == '__main__':
         pickle.dump(clf, file)
     """
     X_train = data_pandas.to_numpy().astype(np.float)
-    clf = iso.iForest(X_train, ntrees=4000, sample_size=15000, ExtensionLevel=2) # 2000, 10000
+    clf = iso.iForest(X_train, ntrees=4000, sample_size=15000, ExtensionLevel=1) # 2000, 10000
     # aumentar ntrees y sample_size: mejorar y probar en paralelo, max probado= 4000, 15000
     # calculate anomaly scores
     X_test = datatest_pandas.to_numpy().astype(np.float)
