@@ -6,9 +6,9 @@ from parse_logs import LogParser
 import pandas as pd
 import time
 import pickle
-#import eif as iso
+import eif as iso
 #from eif_old import iForest as iso
-import eif_old as iso
+#import eif_old as iso
 # https://stackabuse.com/scikit-learn-save-and-restore-models/
 
 from sklearn.ensemble import IsolationForest
@@ -17,15 +17,15 @@ if __name__ == '__main__':
 
     # Generate train data
     logpar = LogParser()
-    data_train = logpar.parse_file('access_news.log', True)
+    data_train = logpar.parse_file('access3_features.log', True)
    # print(data_train[34750]) # line
     print('========================================================')
-    data_test = logpar.parse_file('news_test.txt', False)
+    data_test = logpar.parse_file('testdata3.log', False)
     #print(data_test)
-    data_pandas = pd.DataFrame(data_train)[[0,1,2,3,4]]
+    data_pandas = pd.DataFrame(data_train)[[0,1,2]]
     #print(data_pandas)
 
-    datatest_pandas = pd.DataFrame(data_test)[[0,1,2,3,4]]
+    datatest_pandas = pd.DataFrame(data_test)[[0,1,2]]
     #print(datatest_pandas)
     data = np.array(data_train)
     data_test = np.array(data_test)
@@ -104,7 +104,10 @@ if __name__ == '__main__':
         pickle.dump(clf, file)
     """
     X_train = data_pandas.to_numpy().astype(np.float)
-    clf = iso.iForest(X_train, ntrees=4000, sample_size=15000, ExtensionLevel=1) # 2000, 10000
+    print(X_train.shape[0])
+    print(X_train[0])
+    print(data_pandas[0])
+    clf = iso.iForest(X_train, ntrees=4000, sample_size=5000, ExtensionLevel=1) # 2000, 10000
     # aumentar ntrees y sample_size: mejorar y probar en paralelo, max probado= 4000, 15000
     # calculate anomaly scores
     X_test = datatest_pandas.to_numpy().astype(np.float)
