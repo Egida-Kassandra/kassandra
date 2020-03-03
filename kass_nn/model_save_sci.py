@@ -22,10 +22,10 @@ if __name__ == '__main__':
     print('========================================================')
     data_test = logpar.parse_file('testdata3.log', False)
     #print(data_test)
-    data_pandas = pd.DataFrame(data_train)[[0,1,2]]
+    data_pandas = pd.DataFrame(data_train)[[0,1]]
     #print(data_pandas)
 
-    datatest_pandas = pd.DataFrame(data_test)[[0,1,2]]
+    datatest_pandas = pd.DataFrame(data_test)[[0,1]]
     #print(datatest_pandas)
     data = np.array(data_train)
     data_test = np.array(data_test)
@@ -107,7 +107,11 @@ if __name__ == '__main__':
     print(X_train.shape[0])
     print(X_train[0])
     print(data_pandas[0])
-    clf = iso.iForest(X_train, ntrees=4000, sample_size=5000, ExtensionLevel=1) # 2000, 10000
+    print("TRAIN")
+    start = time.time()
+    #clf = iso.iForest(X_train, ntrees=2000, sample_size=20000, ExtensionLevel=1) # 2000, 20000 ###### cuidaooo
+    end = time.time()
+    print(end - start)
     # aumentar ntrees y sample_size: mejorar y probar en paralelo, max probado= 4000, 15000
     # calculate anomaly scores
     X_test = datatest_pandas.to_numpy().astype(np.float)
