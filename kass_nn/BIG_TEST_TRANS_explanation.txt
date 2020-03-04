@@ -1,8 +1,18 @@
 X - Hour
-V - random normal
 X - Ip 10.10.10.10
 X - Ip 9.9.9.9
-V - on top file
-V - on end file // probar con más arboles
 X - method PUT
-X - method POST
+X - method POST (also for url present on datatrain but not for that method)
+X - new url (ip few occurences)
+X - new url (ip more occurences)
+X - url present on datatrain but not for that ip
+X - url present on datatrain but not for that ip 2
+X - new status code
+X - status code present on datatrain but not for that request
+V - on top file one time 12.12.12.12 with several entries (14)
+V - on end file one time 11.11.11.11 with several entries (14) line 37k// probar con más arboles -> igual, necesita más apariciones en datatrain
+V - random normal
+V - line 5k
+V - line 14k
+V - line 20k
+V - line 33k

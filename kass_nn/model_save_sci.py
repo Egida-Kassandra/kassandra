@@ -21,11 +21,11 @@ if __name__ == '__main__':
    # print(data_train[34750]) # line
     print('========================================================')
     data_test = logpar.parse_file('BIG_TEST_TRANS.txt', False)
-    print(data_train)
-    data_pandas = pd.DataFrame(data_train)[[0,1]]
+    #print(data_train)
+    data_pandas = pd.DataFrame(data_train)[[0,1,2,3,4]]
     #print(data_pandas)
 
-    datatest_pandas = pd.DataFrame(data_test)[[0,1]]
+    datatest_pandas = pd.DataFrame(data_test)[[0,1,2,3,4]]
     #print(datatest_pandas)
     data = np.array(data_train)
     data_test = np.array(data_test)
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     #print(data_pandas[0])
     print("TRAIN")
     start = time.time()
-    clf = iso.iForest(X_train, ntrees=2000, sample_size=20000, ExtensionLevel=1) # 2000, 20000, ext 1 ###### cuidaooo
+    clf = iso.iForest(X_train, ntrees=2000, sample_size=20000, ExtensionLevel=3) # 2000, 20000, ext 1 ###### cuidaooo
     end = time.time()
     print(end - start)
     # aumentar ntrees y sample_size: mejorar y probar en paralelo, max probado= 4000, 15000
@@ -126,7 +126,7 @@ if __name__ == '__main__':
     anomaly_scores_sorted = np.argsort(anomaly_scores)
     indices_with_preds = anomaly_scores_sorted[-int(np.ceil(0.9 * X_train.shape[0])):]
     print(indices_with_preds)
-    print(anomaly_scores)
+    print(np.sort(anomaly_scores))
 
     """
     ss0=np.argsort(anomaly_scores)

@@ -25,7 +25,7 @@ class LogParser:
             2000: [datetime.strptime('20:00:01', '%H:%M:%S'),  datetime.strptime('23:59:59', '%H:%M:%S')]
         }
         self.weights_train = [1,500,1,200,1,1,1]
-        self.weights_test = [1,500,1,200,1,1,1]
+        self.weights_test = [1000,500,1,200,1,1,1]
         #weights = []
 
     def parse_calendar_get_id(self, date_string):
