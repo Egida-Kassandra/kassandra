@@ -20,8 +20,8 @@ if __name__ == '__main__':
     data_train = logpar.parse_file('access3_features.log', True)
    # print(data_train[34750]) # line
     print('========================================================')
-    data_test = logpar.parse_file('testdata3.log', False)
-    #print(data_test)
+    data_test = logpar.parse_file('BIG_TEST_TRANS.txt', False)
+    print(data_train)
     data_pandas = pd.DataFrame(data_train)[[0,1]]
     #print(data_pandas)
 
@@ -104,12 +104,14 @@ if __name__ == '__main__':
         pickle.dump(clf, file)
     """
     X_train = data_pandas.to_numpy().astype(np.float)
-    print(X_train.shape[0])
-    print(X_train[0])
-    print(data_pandas[0])
+
+
+    #print(X_train.shape[0])
+    #print(X_train[0])
+    #print(data_pandas[0])
     print("TRAIN")
     start = time.time()
-    #clf = iso.iForest(X_train, ntrees=2000, sample_size=20000, ExtensionLevel=1) # 2000, 20000 ###### cuidaooo
+    clf = iso.iForest(X_train, ntrees=2000, sample_size=20000, ExtensionLevel=1) # 2000, 20000, ext 1 ###### cuidaooo
     end = time.time()
     print(end - start)
     # aumentar ntrees y sample_size: mejorar y probar en paralelo, max probado= 4000, 15000
@@ -125,6 +127,27 @@ if __name__ == '__main__':
     indices_with_preds = anomaly_scores_sorted[-int(np.ceil(0.9 * X_train.shape[0])):]
     print(indices_with_preds)
     print(anomaly_scores)
+
+    """
+    ss0=np.argsort(anomaly_scores)
+
+
+    f = plt.figure(figsize=(15,6))
+    x = np.array(data_pandas[0].tolist())
+    y = np.array(data_pandas[1].tolist())
+    plt.scatter(x, y, s=200, c='g', edgecolor='g')
+    #plt.scatter(x[ss0[-10:]], y[ss0[-10:]], s=55, c='k')
+    #plt.scatter(x[ss0[:10]], y[ss0[:10]], s=55, c='r')
+
+    x = np.array(datatest_pandas[0].tolist())
+    y = np.array(datatest_pandas[1].tolist())
+    plt.scatter(x,y,s=20,c='b',edgecolor='b')
+    plt.scatter(x[ss0[-1:]],y[ss0[-1:]],s=20,c='k')
+    plt.scatter(x[ss0[:1]],y[ss0[:1]],s=20,c='r')
+    plt.title('extended')
+
+    plt.show()
+    """
     """
     for i in range(0, len(anomaly_scores)):
         if anomaly_scores[i] > 0.55:

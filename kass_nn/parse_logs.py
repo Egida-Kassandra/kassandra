@@ -19,9 +19,9 @@ class LogParser:
         self.dict_status_code = {}
         self.dict_calendar_ids = {
             0: [datetime.strptime('09:00:00', '%H:%M:%S'),  datetime.strptime('14:00:00', '%H:%M:%S')], # work
-            50: [datetime.strptime('16:00:00', '%H:%M:%S'),  datetime.strptime('20:00:00', '%H:%M:%S')], # work
-            1900: [datetime.strptime('00:00:00', '%H:%M:%S'),  datetime.strptime('08:59:59', '%H:%M:%S')],
-            1950: [datetime.strptime('14:00:01', '%H:%M:%S'),  datetime.strptime('15:59:59', '%H:%M:%S')],
+            500: [datetime.strptime('16:00:00', '%H:%M:%S'),  datetime.strptime('20:00:00', '%H:%M:%S')], # work
+            1000: [datetime.strptime('00:00:00', '%H:%M:%S'),  datetime.strptime('08:59:59', '%H:%M:%S')],
+            1500: [datetime.strptime('14:00:01', '%H:%M:%S'),  datetime.strptime('15:59:59', '%H:%M:%S')],
             2000: [datetime.strptime('20:00:01', '%H:%M:%S'),  datetime.strptime('23:59:59', '%H:%M:%S')]
         }
         self.weights_train = [1,500,1,200,1,1,1]
@@ -51,7 +51,13 @@ class LogParser:
         #result = pool.map(partial(parse_line, weights=www), lines)
         result = []
         for line in lines:
-            result.append(self.parse_line(line, www, is_train))
+            new_line = self.parse_line(line, www, is_train)
+            result.append(new_line)
+            """
+            if new_line is not None:
+                if new_line[0] == 107700:
+                    result.append(new_line)
+            """
         #pool.close()
         #pool.join()
         result = [r for r in result if r is not None]

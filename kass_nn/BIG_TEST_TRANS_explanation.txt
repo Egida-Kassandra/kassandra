@@ -1,0 +1,8 @@
+X - Hour
+V - random normal
+X - Ip 10.10.10.10
+X - Ip 9.9.9.9
+V - on top file
+V - on end file // probar con más arboles
+X - method PUT
+X - method POST
