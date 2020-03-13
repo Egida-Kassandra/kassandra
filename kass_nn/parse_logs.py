@@ -25,7 +25,7 @@ class LogParser:
             2000: [datetime.strptime('20:00:01', '%H:%M:%S'),  datetime.strptime('23:59:59', '%H:%M:%S')]
         }
         self.weights_train = [1,500,1,200,1,1,1]
-        self.weights_test = [1000,500,1,200,1,1,1]
+        self.weights_test = [1,500,1,200,1,1,1]
         #weights = []
 
     def parse_calendar_get_id(self, date_string):
@@ -130,6 +130,8 @@ class LogParser:
             #single_data.append(self.dict_user_agent[user_agent])
             #print(dict_req_meth)
             #print(single_data)
+
+            single_data.append(self.dict_req_url[url] + self.dict_ip[ip])
             if not is_train:
 
                 #print(line)
