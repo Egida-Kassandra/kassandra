@@ -17,15 +17,15 @@ if __name__ == '__main__':
 
     # Generate train data
     logpar = LogParser()
-    data_train = logpar.parse_file('access3_features.log', True)
+    data_train = logpar.parse_file('train_logs/access3_features.log', True)
    # print(data_train[34750]) # line
     print('========================================================')
-    data_test = logpar.parse_file('BIG_TEST_TRANS.txt', False)
+    data_test = logpar.parse_file('test_logs/BIG_TEST_TRANS.txt', False)
     #print(data_train)
-    data_pandas = pd.DataFrame(data_train)[[0,1,2,3,4]]
+    data_pandas = pd.DataFrame(data_train)[[3,4]]
     #print(data_pandas)
 
-    datatest_pandas = pd.DataFrame(data_test)[[0,1,2,3,4]]
+    datatest_pandas = pd.DataFrame(data_test)[[3,4]]
     #print(datatest_pandas)
     data = np.array(data_train)
     data_test = np.array(data_test)
@@ -33,56 +33,7 @@ if __name__ == '__main__':
     print(data_test.shape)
     #print(data)
 
-    #X_train = np.array(data_train)
-    #X_train.reshape(-1, 1)
-    # Generate some regular novel observations
 
-    #X_test = np.array(data[531460:])
-    #data_test = parse_logs.parse_file('fool2.log')
-    #data_test = data[:531469]
-    #X_test = np.array(data_test)
-    # Generate some abnormal novel observations
-
-    #X_outliers = np.array(data[len(data)-1])
-    #X_outliers = X_outliers.reshape(1, -1)
-
-    # fit the model
-    # necesario parametrizar el threshold, depende del dominio
-    # para news: 0.03
-    #clf = IsolationForest(n_estimators=500, max_samples=1000, contamination=0.03, random_state=0)
-    # para tramsilverio: 0.005
-    #clf = IsolationForest(n_estimators=37680, max_samples=512, contamination=0.01, random_state=0)
-    #clf = IsolationForest(n_estimators=10000, max_samples=37680, contamination=0.01, random_state=rng, max_features=2, n_jobs=4)
-
-    #clf = IsolationForest(n_estimators=2000, max_samples=1000, contamination=0.016, random_state=rng, max_features=5,
-    #                     n_jobs=-1)
-
-    # access1
-    # dict ip= 1663 -> si
-    # 1732 -> anomalia
-    # 1703,1702,1701 -> anomalia
-    # 1700 -> anomalia
-    # 1698 -> anomalia
-
-    # linea 34k -> si
-    # 34228 -> si
-    # 34689 -> si
-    # 34700 -> si
-    # 34780 -> si
-    # 34800 -> si
-    # 34810 -> si
-    # 34814 -> si
-    # 34815 -> si
-    # 34816 -> anom
-    # 34818 -> anom
-    # 34820 -> anom
-    # 34821 -> anom
-    # 34822 -> anom
-    # 34823 -> anom
-    # 34824 -> anom
-    # 34825 -> anom
-    # 34826 -> anom
-    #clf.fit(data_pandas)
     """
     print("DECISION FUNCTION")
     start = time.time()
@@ -111,7 +62,7 @@ if __name__ == '__main__':
     #print(data_pandas[0])
     print("TRAIN")
     start = time.time()
-    clf = iso.iForest(X_train, ntrees=2000, sample_size=20000, ExtensionLevel=3) # 2000, 20000, ext 1 ###### cuidaooo
+    clf = iso.iForest(X_train, ntrees=1500, sample_size=15000, ExtensionLevel=1) # 2000, 20000, ext 1 ###### cuidaooo
     end = time.time()
     print(end - start)
     # aumentar ntrees y sample_size: mejorar y probar en paralelo, max probado= 4000, 15000
@@ -128,26 +79,27 @@ if __name__ == '__main__':
     print(indices_with_preds)
     print(np.sort(anomaly_scores))
 
-    """
+
     ss0=np.argsort(anomaly_scores)
 
 
     f = plt.figure(figsize=(15,6))
-    x = np.array(data_pandas[0].tolist())
-    y = np.array(data_pandas[1].tolist())
-    plt.scatter(x, y, s=200, c='g', edgecolor='g')
+    x = np.array(data_pandas[3].tolist())
+    y = np.array(data_pandas[4].tolist())
+    plt.scatter(x, y, s=60, c='g', edgecolor='g')
     #plt.scatter(x[ss0[-10:]], y[ss0[-10:]], s=55, c='k')
     #plt.scatter(x[ss0[:10]], y[ss0[:10]], s=55, c='r')
 
-    x = np.array(datatest_pandas[0].tolist())
-    y = np.array(datatest_pandas[1].tolist())
+    x = np.array(datatest_pandas[3].tolist())
+    y = np.array(datatest_pandas[4].tolist())
     plt.scatter(x,y,s=20,c='b',edgecolor='b')
-    plt.scatter(x[ss0[-1:]],y[ss0[-1:]],s=20,c='k')
+    plt.scatter(x[ss0[-5:]],y[ss0[-5:]],s=20,c='k')
     plt.scatter(x[ss0[:1]],y[ss0[:1]],s=20,c='r')
+    plt.scatter(x[7], y[7], s=20, c='y')
     plt.title('extended')
 
     plt.show()
-    """
+
     """
     for i in range(0, len(anomaly_scores)):
         if anomaly_scores[i] > 0.55:
