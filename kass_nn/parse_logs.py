@@ -1,15 +1,22 @@
 from _weakref import ref
-
+from datetime import datetime
 from dateutil.parser import parse
 from multiprocessing import Pool
+
 import numpy as np
 import re
 import threading
-from datetime import datetime
+import os
+
 
 class LogParser:
+    """LogParser
+
+    Clase que se encarga de transformar los archivos de log en arrays numericos
+    """
 
     def __init__(self):
+        """Constructor"""
         self.dict_ip = {}
         self.dict_req_meth = {}
         self.dict_req_url = {}
@@ -26,7 +33,6 @@ class LogParser:
         }
         self.weights_train = [1,500,1,200,1,1,1]
         self.weights_test = [1,500,1,200,1,1,1]
-        #weights = []
 
     def parse_calendar_get_id(self, date_string):
         current_hour = datetime.strptime(date_string, '%H:%M:%S')
@@ -42,26 +48,22 @@ class LogParser:
         return False
 
     def parse_file(self, filename, is_train):
-        lines = open(filename).read().splitlines()
-        #pool = Pool(1)
+        """Parse file
+        :param filename: Nombre del fichero a parsear
+        :param is_train: boolean
+        """
+        cur_path = os.path.dirname(__file__)
+        lines = open((os.path.relpath(filename, cur_path)).read().splitlines()
 
         www = self.weights_test
         if is_train:
             www = self.weights_train
-        #result = pool.map(partial(parse_line, weights=www), lines)
         result = []
         for line in lines:
             new_line = self.parse_line(line, www, is_train)
             result.append(new_line)
-            """
-            if new_line is not None:
-                if new_line[0] == 107700:
-                    result.append(new_line)
-            """
-        #pool.close()
-        #pool.join()
+    
         result = [r for r in result if r is not None]
-        #print(self.dict_ip)
         return result
 
     def parse_line(self, line, weights, is_train):
@@ -139,8 +141,7 @@ class LogParser:
                 #print()
         except Exception as e:
             print(e)
-            print("fuck this line: ", line)
-
+            print("fuck cotareloooo, xd this line: ", line) 
             return None
         return single_data
 

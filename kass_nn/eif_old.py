@@ -10,7 +10,7 @@ import numpy as np
 import random as rn
 import os
 import warnings
-from version import __version__
+#from version import __version__
 
 
 def c_factor(n) :
