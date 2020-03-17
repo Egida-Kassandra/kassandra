@@ -1,6 +1,7 @@
+from kass_nn.parse_logs import LogParser
+
 import numpy as np
 import matplotlib.pyplot as plt
-from parse_logs import LogParser
 import pandas as pd
 import time
 import eif as iso
