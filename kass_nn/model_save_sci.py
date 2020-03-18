@@ -9,6 +9,9 @@ import eif as iso
 
 
 def load_data_pandas(filename, is_train, column_array):
+    """
+    Load
+    """
     logpar = LogParser()
     data_train = logpar.parse_file(filename, is_train)
     data_pandas = pd.DataFrame(data_train)[column_array]
