@@ -1,6 +1,5 @@
 cycler==0.10.0
 Cython==0.29.15
-eif==2.1.0
 kiwisolver==1.1.0
 matplotlib==3.2.0
 numpy==1.18.2
