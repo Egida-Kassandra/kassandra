@@ -11,7 +11,10 @@ import eif as iso
 
 def load_data_pandas(filename, is_train, column_array):
     """
-    Load
+    Loads log file and returns pandas data frames
+    :param filename: name of the file
+    :param is_train: boolean, if the file has training or testing logs
+    :param column_array: int[], columns used for training and testing
     """
     logpar = LogParser()
     data_train = logpar.parse_file(filename, is_train)
@@ -20,10 +23,21 @@ def load_data_pandas(filename, is_train, column_array):
 
 
 def load_data_float(data_pandas):
+    """
+    Returns numpy array of float from pandas data frame
+    :param data_pandas: pandas data frame
+    """
     return data_pandas.to_numpy().astype(np.float)
 
 
 def plot_data(data_train, data_test, col_X, colY):
+    """
+    Plots 2D data set training and testing
+    :param data_train: pandas data frame train
+    :param data_test: pandas data frame test
+    :param col_X: int, x axis
+    :param col_Y: int, y axis
+    """
     ss0 = np.argsort(anomaly_scores)
     f = plt.figure(figsize=(15, 6))
     # Train data
@@ -42,6 +56,7 @@ def plot_data(data_train, data_test, col_X, colY):
 
 if __name__ == '__main__':
 
+    # Columns used for training and testing
     columns = [3, 4]
 
     # Loading training data
