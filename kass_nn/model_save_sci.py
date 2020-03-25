@@ -4,18 +4,30 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import eif as iso
+import time
+
+import numpy as np
+
+from sklearn.decomposition import PCA
+from sklearn import datasets
+
+import matplotlib.pyplot as plt
+
+from mpl_toolkits.mplot3d import Axes3D
+
+from sklearn import decomposition
 
 # https://stackabuse.com/scikit-learn-save-and-restore-models/
 
 
-def load_data_pandas(filename, is_train, column_array):
+def load_data_pandas(logpar, filename, is_train, column_array):
     """
     Loads log file and returns pandas data frames
     :param filename: name of the file
     :param is_train: boolean, if the file has training or testing logs
     :param column_array: int[], columns used for training and testing
     """
-    logpar = LogParser()
+
     data_train = logpar.parse_file(filename, is_train)
     data_pandas = pd.DataFrame(data_train)[column_array]
     return data_pandas
@@ -40,8 +52,8 @@ def plot_data(data_train, data_test, col_X, colY, anomaly_scores, clf):
     """
 
     #xx, yy = np.meshgrid(np.linspace(np.min(data_train[col_X]), np.max(data_train[colY]), 50), np.linspace(np.min(data_train[col_X]), np.max(data_train[colY]), 50))
-    xx, yy = np.meshgrid(np.linspace(-5, 15, 50),
-                         np.linspace(-5, 15, 50))
+    xx, yy = np.meshgrid(np.linspace(-300, 300, 50),
+                         np.linspace(-300, 300, 50))
     S0 = clf.compute_paths(np.c_[xx.ravel(), yy.ravel()])
     S0 = S0.reshape(xx.shape)
     ss0 = np.argsort(anomaly_scores)
@@ -74,12 +86,11 @@ middle_point_A = 0
 middle_point_B = 0
 middle_point_C = 0
 def create_dict(data_list, data_class, points): # atencion gochada
-
+    data_list = data_list.to_numpy()
     data_list_red = []
     for elem in data_list:
         if elem[1] == data_class:
             data_list_red.append(elem)
-    print(len(data_list_red))
     chunk = int(len(data_list_red)/4)
     for i in range(0,chunk):
         elem = data_list_red[i]
@@ -135,100 +146,112 @@ def create_dict(data_list, data_class, points): # atencion gochada
     return [dictionary1,dictionary2,dictionary3,dictionary4]
 
 
-def insert_test_points(point, data_class):
+def insert_test_points(point, data_class, weight):
+    print(point)
     new_point = []
-    if point[0] <= middle_point_A:
-        if point[0] not in dictionary1:
-            id_p = len(dictionary1) + 1
-            new_point.append(id_p)
-            new_point.append(id_p)
-    elif point[0] > middle_point_A and point[0] <= middle_point_B:
-        if point[0] not in dictionary2:
-            id_p = len(dictionary2) + 1
-            new_point.append(id_p)
-            new_point.append(id_p)
-    elif point[0] > middle_point_B and point[0] <= middle_point_C:
-        if point[0] not in dictionary1:
-            id_p = len(dictionary1) + 1
-            new_point.append(id_p)
-            new_point.append(id_p)
-    else:
-        if point[0] not in dictionary1:
-            id_p = len(dictionary1) + 1
-            new_point.append(id_p)
-            new_point.append(id_p)
+    if point[1] == data_class:
+        if point[0] <= middle_point_A:
+            if point[0] not in dictionary1:
+                id_p = len(dictionary1) + weight
+                new_point.append(id_p)
+                new_point.append(id_p)
+            else:
+                new_point.append(dictionary1[point[0]])
+                new_point.append(dictionary1[point[0]])
+        elif point[0] > middle_point_A and point[0] <= middle_point_B:
+            if point[0] not in dictionary2:
+                id_p = len(dictionary2) + weight
+                new_point.append(id_p)
+                new_point.append(-id_p)
+            else:
+                new_point.append(dictionary2[point[0]])
+                new_point.append(dictionary2[point[0]])
+        elif point[0] > middle_point_B and point[0] <= middle_point_C:
+            if point[0] not in dictionary3:
+                id_p = len(dictionary1) + weight
+                new_point.append(-id_p)
+                new_point.append(-id_p)
+            else:
+                new_point.append(dictionary3[point[0]])
+                new_point.append(dictionary3[point[0]])
+        else:
+            if point[0] not in dictionary4:
+                id_p = len(dictionary1) + weight
+                new_point.append(-id_p)
+                new_point.append(id_p)
+            else:
+                new_point.append(dictionary4[point[0]])
+                new_point.append(dictionary4[point[0]])
     return new_point
 
 
 
+def cross_distribution():
+    # Columns used for training and testing
+    columns = [0, 1]
+    logpar = LogParser()
 
-if __name__ == '__main__':
+    # Loading training data
+    train = load_data_pandas(logpar, 'train_logs/access3_features.log', True, columns)
 
-    train = [[1,2],
-             [2,2],
-             [3,4],
-             [4,4],
-             [5,2],
-             [6,4],
-             [7,2],
-             [8,4],
-             [9,4],
-             [10,4]
-             ]
-
+    train.sort_values(by=[0], inplace=True)
+    # X_train = load_data_float(data_pandas)
     points = []
-    print(create_dict(train, 2, points))
-    print(points)
+    create_dict(train, 1500, points)
+
     data_pandas = pd.DataFrame(points)
 
-    middle_point_A = (list(dictionary2)[0] - list(dictionary1)[-1])/2.0 + list(dictionary1)[-1]
-    middle_point_B = (list(dictionary3)[0] - list(dictionary2)[-1])/2.0 + list(dictionary2)[-1]
-    middle_point_C = (list(dictionary4)[0] - list(dictionary3)[-1])/2.0 + list(dictionary3)[-1]
-    print(middle_point_A, middle_point_B, middle_point_C)
-
-    test = [[1, 4],
-             [2, 2],
-             [3, 4],
-             [4, 2],
-             [5, 6],
-             [6, 4],
-             [7, 4],
-             [8, 2],
-             [9, 2],
-             [10, 2]]
+    middle_point_A = (list(dictionary2)[0] - list(dictionary1)[-1]) / 2.0 + list(dictionary1)[-1]
+    middle_point_B = (list(dictionary3)[0] - list(dictionary2)[-1]) / 2.0 + list(dictionary2)[-1]
+    middle_point_C = (list(dictionary4)[0] - list(dictionary3)[-1]) / 2.0 + list(dictionary3)[-1]
 
     points_test = []
-    print(create_dict(test, 2, points_test))
+    test = load_data_pandas(logpar, 'test_logs/BIG_TEST_TRANS2.txt', True, columns)
+
+    test.sort_values(by=[0], inplace=True)
+    print(test)
+    # print(create_dict(test, 2, points_test))
+    test = test.to_numpy()
+    for elem in test:
+        points_test.append(insert_test_points(elem, 1500, 100))
     print(points_test)
-    
+
     datatest_pandas = pd.DataFrame(points_test)
     X_train = load_data_float(data_pandas)
     X_test = load_data_float(datatest_pandas)
 
-
-
-    clf = iso.iForest(X_train, ntrees=1000, sample_size=4, ExtensionLevel=1)  # 2000, 20000, ext 1 ###### cuidaooo
+    clf = iso.iForest(X_train, ntrees=2000, sample_size=1500, ExtensionLevel=1)  # 2000, 20000, ext 1 ###### cuidaooo
 
     anomaly_scores = clf.compute_paths(X_test)
+    print(anomaly_scores)
     plot_data(data_pandas, datatest_pandas, 0, 1, anomaly_scores, clf)
 
-    """
+
+
+if __name__ == '__main__':
+    logpar = LogParser()
     # Columns used for training and testing
-    columns = [3, 4]
+    columns = [0,2,3]
     
     # Loading training data
-    data_pandas = load_data_pandas('train_logs/access3_features.log', True, columns)
+    data_pandas = load_data_pandas(logpar, 'train_logs/access3_features.log', True, columns)
     X_train = load_data_float(data_pandas)
+    np.random.seed(123)
+    pca = decomposition.PCA(n_components=2)
+    pca.fit(X_train)
+    X_train = pca.transform(X_train)
     
     # Loading testing data
-    datatest_pandas = load_data_pandas('test_logs/BIG_TEST_TRANS.txt', True, columns)
+    datatest_pandas = load_data_pandas(logpar, 'test_logs/BIG_TEST_TRANS.txt', True, columns)
     X_test = load_data_float(datatest_pandas)
-
+    pca.fit(X_test)
+    X_test = pca.transform(X_test)
+    print(X_test)
     # Train block
     print("TRAIN")
     start = time.time()
 
-    clf = iso.iForest(X_train, ntrees=1000, sample_size=15000, ExtensionLevel=1) # 2000, 20000, ext 1 ###### cuidaooo
+    clf = iso.iForest(X_train, ntrees=2000, sample_size=20000, ExtensionLevel=1) # 2000, 20000, ext 1 ###### cuidaooo
 
     end = time.time()
     print(end - start)
@@ -248,6 +271,8 @@ if __name__ == '__main__':
     print((anomaly_scores))
 
     # Plot block
-    plot_data(data_pandas, datatest_pandas, 3, 4, anomaly_scores, clf)
-    """
+    data_pandas = pd.DataFrame(X_train)
+    datatest_pandas = pd.DataFrame(X_test)
+    plot_data(data_pandas, datatest_pandas, 0, 1, anomaly_scores, clf)
+
 
