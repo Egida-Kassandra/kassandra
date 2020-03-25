@@ -2,12 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.font_manager
 from sklearn import svm
-from parse_logs import LogParser
+from kass_nn.parse_logs import LogParser
 import pandas as pd
 import time
 from sklearn.neighbors import LocalOutlierFactor
 import pickle
-import eif as iso
+# import eif as iso
 # from eif_old import iForest as iso
 # import eif_old as iso
 # https://stackabuse.com/scikit-learn-save-and-restore-models/
@@ -21,22 +21,14 @@ if __name__ == '__main__':
 
     # Generate train data
     logpar = LogParser()
-    data_train = logpar.parse_file('access3_features.log', True)
-    data_train.append([2811, 0, 0, 0, 0])
-    data_train.append([2812, 0, 0, 0, 0])
-    data_train.append([2813, 0, 0, 0, 0])
-    data_train.append([2814, 0, 0, 0, 0])
-    data_train.append([2815, 0, 0, 0, 0])
-    data_train.append([2816, 0, 0, 0, 0])
-    data_train.append([2817, 0, 0, 0, 0])
-    data_train.append([2818, 0, 0, 0, 0])
-    data_train.append([2819, 0, 0, 0, 0])
-    data_train.append([2811, 0, 0, 0, 0])
-    data_train.append([2811, 0, 0, 0, 0])
-    data_train.append([2811, 0, 0, 0, 0])
+    data_train = logpar.parse_file('./train_logs/access3_features.log', True)
     # print(data_train[34750]) # line
     print('========================================================')
     data_test = logpar.parse_file('BIG_TEST_TRANS.txt', False)
+    data_train = logpar.parse_file('./train_logs/access3_features.log', True)
+    # print(data_train[34750]) # line
+    print('========================================================')
+    data_test = logpar.parse_file('./test_logs/testdata3.log', False)
     # print(data_test)
     data_pandas = pd.DataFrame(data_train)[[0, 4]]
     # print(data_pandas)
