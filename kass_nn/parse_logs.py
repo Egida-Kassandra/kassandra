@@ -1,10 +1,4 @@
-from _weakref import ref
-
-from dateutil.parser import parse
-from multiprocessing import Pool
-import numpy as np
 import re
-import threading
 from datetime import datetime
 
 class LogParser:
@@ -25,7 +19,7 @@ class LogParser:
             2000: [datetime.strptime('20:00:01', '%H:%M:%S'),  datetime.strptime('23:59:59', '%H:%M:%S')]
         }
         self.weights_train = [1,500,1,200,1,1,1]
-        self.weights_test = [1000,500,1,200,1,1,1]
+        self.weights_test = [1,500,1,200,1,1,1]
         #weights = []
 
     def parse_calendar_get_id(self, date_string):
@@ -62,6 +56,10 @@ class LogParser:
         #pool.join()
         result = [r for r in result if r is not None]
         #print(self.dict_ip)
+        #self.dict_ip['GAP'] = len(self.dict_ip)+1000
+        # upper bound
+        #print([self.dict_ip["GAP"],0,0,0,0])
+
         return result
 
     def parse_line(self, line, weights, is_train):
@@ -149,7 +147,10 @@ class LogParser:
 
         try:
             if word not in dictionary:
-                dictionary[word] = len(dictionary)*step
+                if len(dictionary) == 0:
+                    dictionary[word] = 0
+                else:
+                    dictionary[word] = (int(dictionary[list(dictionary)[len(dictionary)-1]]/step)+1)*step
         finally:
             return dictionary
 

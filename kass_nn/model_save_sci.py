@@ -18,9 +18,11 @@ if __name__ == '__main__':
     # Generate train data
     logpar = LogParser()
     data_train = logpar.parse_file('access3_features.log', True)
+
    # print(data_train[34750]) # line
     print('========================================================')
     data_test = logpar.parse_file('BIG_TEST_TRANS.txt', False)
+
     #print(data_train)
     data_pandas = pd.DataFrame(data_train)[[0,1,2,3,4]]
     #print(data_pandas)
@@ -57,31 +59,7 @@ if __name__ == '__main__':
     #clf = IsolationForest(n_estimators=2000, max_samples=1000, contamination=0.016, random_state=rng, max_features=5,
     #                     n_jobs=-1)
 
-    # access1
-    # dict ip= 1663 -> si
-    # 1732 -> anomalia
-    # 1703,1702,1701 -> anomalia
-    # 1700 -> anomalia
-    # 1698 -> anomalia
 
-    # linea 34k -> si
-    # 34228 -> si
-    # 34689 -> si
-    # 34700 -> si
-    # 34780 -> si
-    # 34800 -> si
-    # 34810 -> si
-    # 34814 -> si
-    # 34815 -> si
-    # 34816 -> anom
-    # 34818 -> anom
-    # 34820 -> anom
-    # 34821 -> anom
-    # 34822 -> anom
-    # 34823 -> anom
-    # 34824 -> anom
-    # 34825 -> anom
-    # 34826 -> anom
     #clf.fit(data_pandas)
     """
     print("DECISION FUNCTION")
@@ -111,7 +89,7 @@ if __name__ == '__main__':
     #print(data_pandas[0])
     print("TRAIN")
     start = time.time()
-    clf = iso.iForest(X_train, ntrees=2000, sample_size=20000, ExtensionLevel=3) # 2000, 20000, ext 1 ###### cuidaooo
+    clf = iso.iForest(X_train, ntrees=1000, sample_size=15000, ExtensionLevel=1) # 2000, 20000, ext 1 ###### cuidaooo
     end = time.time()
     print(end - start)
     # aumentar ntrees y sample_size: mejorar y probar en paralelo, max probado= 4000, 15000
@@ -120,13 +98,43 @@ if __name__ == '__main__':
     print("PREDICT")
     start = time.time()
     anomaly_scores = clf.compute_paths(X_test)
+
     end = time.time()
     print(end - start)
     #anomaly_scores = [-r for r in anomaly_scores if r < 0.5]
     anomaly_scores_sorted = np.argsort(anomaly_scores)
     indices_with_preds = anomaly_scores_sorted[-int(np.ceil(0.9 * X_train.shape[0])):]
     print(indices_with_preds)
-    print(np.sort(anomaly_scores))
+    print((anomaly_scores))
+
+    x = np.array(data_pandas[0].tolist()[:200])
+    y = np.array(data_pandas[4].tolist()[:200])
+
+    #x = np.array(datatest_pandas[0].tolist())
+    #y = np.array(datatest_pandas[1].tolist())
+
+    xx, yy = np.meshgrid(np.linspace(-500, 3000, 50), np.linspace(-120, 2000, 50))
+    xx = xx.astype(np.float)
+    yy = yy.astype(np.float)
+    anomaly_scores = clf.compute_paths(X_in=np.c_[xx.ravel(), yy.ravel()])
+
+
+
+    S1 = anomaly_scores.reshape(xx.shape)
+    f = plt.figure(figsize=(15, 6))
+    ax2 = f.add_subplot(121)
+    levels = np.linspace(np.min(S1), np.max(S1), 10)
+    CS = ax2.contourf(xx, yy, S1, levels, cmap=plt.cm.YlOrRd)
+    plt.scatter(x, y, s=15, c='None', edgecolor='k')
+
+    # test data
+    ss0 = np.argsort(anomaly_scores)
+    x = np.array(datatest_pandas[0].tolist())
+    y = np.array(datatest_pandas[4].tolist())
+    plt.scatter(x, y, s=20, c='b', edgecolor='b')
+    plt.axis("equal")
+
+    plt.show()
 
     """
     ss0=np.argsort(anomaly_scores)
@@ -134,13 +142,13 @@ if __name__ == '__main__':
 
     f = plt.figure(figsize=(15,6))
     x = np.array(data_pandas[0].tolist())
-    y = np.array(data_pandas[1].tolist())
+    y = np.array(data_pandas[3].tolist())
     plt.scatter(x, y, s=200, c='g', edgecolor='g')
     #plt.scatter(x[ss0[-10:]], y[ss0[-10:]], s=55, c='k')
     #plt.scatter(x[ss0[:10]], y[ss0[:10]], s=55, c='r')
 
     x = np.array(datatest_pandas[0].tolist())
-    y = np.array(datatest_pandas[1].tolist())
+    y = np.array(datatest_pandas[3].tolist())
     plt.scatter(x,y,s=20,c='b',edgecolor='b')
     plt.scatter(x[ss0[-1:]],y[ss0[-1:]],s=20,c='k')
     plt.scatter(x[ss0[:1]],y[ss0[:1]],s=20,c='r')
