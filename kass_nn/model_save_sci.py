@@ -1,4 +1,4 @@
-from kass_nn.parse_logs import LogParser
+from parse_logs import LogParser
 
 import numpy as np
 import matplotlib.pyplot as plt
