@@ -52,8 +52,8 @@ def plot_data(data_train, data_test, col_X, colY, anomaly_scores, clf):
     """
 
     #xx, yy = np.meshgrid(np.linspace(np.min(data_train[col_X]), np.max(data_train[colY]), 50), np.linspace(np.min(data_train[col_X]), np.max(data_train[colY]), 50))
-    xx, yy = np.meshgrid(np.linspace(-300, 300, 50),
-                         np.linspace(-300, 300, 50))
+    xx, yy = np.meshgrid(np.linspace(-1000, 2000, 50),
+                         np.linspace(-1000, 2000, 50))
     S0 = clf.compute_paths(np.c_[xx.ravel(), yy.ravel()])
     S0 = S0.reshape(xx.shape)
     ss0 = np.argsort(anomaly_scores)
@@ -231,21 +231,21 @@ def cross_distribution():
 if __name__ == '__main__':
     logpar = LogParser()
     # Columns used for training and testing
-    columns = [0,2,3]
+    columns = [0,5]
     
     # Loading training data
     data_pandas = load_data_pandas(logpar, 'train_logs/access3_features.log', True, columns)
     X_train = load_data_float(data_pandas)
     np.random.seed(123)
     pca = decomposition.PCA(n_components=2)
-    pca.fit(X_train)
-    X_train = pca.transform(X_train)
+    #pca.fit(X_train)
+    #X_train = pca.transform(X_train)
     
     # Loading testing data
     datatest_pandas = load_data_pandas(logpar, 'test_logs/BIG_TEST_TRANS.txt', True, columns)
     X_test = load_data_float(datatest_pandas)
-    pca.fit(X_test)
-    X_test = pca.transform(X_test)
+    #pca.fit(X_test)
+    #X_test = pca.transform(X_test)
     print(X_test)
     # Train block
     print("TRAIN")

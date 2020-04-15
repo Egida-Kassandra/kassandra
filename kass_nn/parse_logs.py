@@ -24,8 +24,8 @@ class LogParser:
             1500: [datetime.strptime('14:00:01', '%H:%M:%S'),  datetime.strptime('15:59:59', '%H:%M:%S')],
             2000: [datetime.strptime('20:00:01', '%H:%M:%S'),  datetime.strptime('23:59:59', '%H:%M:%S')]
         }
-        self.weights_train = [1,500,1,200,1,1,1]
-        self.weights_test = [1,500,1,200,1,1,1]
+        self.weights_train = [1,500,20,500,1,1,1]
+        self.weights_test = [1,500,20,500,1,1,1]
 
     def parse_calendar_get_id(self, date_string):
         """
@@ -70,6 +70,7 @@ class LogParser:
             result.append(new_line)
     
         result = [r for r in result if r is not None]
+        print(self.dict_req_meth)
         return result
 
     def parse_line(self, line, weights, is_train):
@@ -98,6 +99,8 @@ class LogParser:
             single_data.append(self.get_status_code(request, weights[3]))
             # Referred URL #
             # User agent #
+
+            single_data.append(str(single_data[0])+str(single_data[2]))
             if not is_train:
                 print(line)
                 print(single_data)
