@@ -1,3 +1,4 @@
+from ctypes import c_ubyte
 from datetime import datetime
 import re
 import os
@@ -24,8 +25,11 @@ class LogParser:
             1500: [datetime.strptime('14:00:01', '%H:%M:%S'),  datetime.strptime('15:59:59', '%H:%M:%S')],
             2000: [datetime.strptime('20:00:01', '%H:%M:%S'),  datetime.strptime('23:59:59', '%H:%M:%S')]
         }
-        self.weights_train = [1,500,20,500,1,1,1]
-        self.weights_test = [1,500,20,500,1,1,1]
+
+        self.dict_req_url_freq = {}
+
+        self.weights_train = [1,1,20,500,1,1,1]
+        self.weights_test = [1,1,20,500,1,1,1]
 
     def parse_calendar_get_id(self, date_string):
         """
@@ -37,6 +41,10 @@ class LogParser:
             if self.is_hour_in_range(current_hour, self.dict_calendar_ids[key]):
                 return key
         return len(self.dict_calendar_ids)
+
+    def get_minute(self, date_string):
+        current_hour = datetime.strptime(date_string, '%H:%M:%S')
+        return current_hour.hour*60 + current_hour.minute
 
 
     def is_hour_in_range(self, current_hour, range):
@@ -55,25 +63,33 @@ class LogParser:
         :param filename: name of the file
         :param is_train: boolean
         """
+
         #cur_path = os.path.dirname(__file__)
         #lines = open(os.path.relpath(filename, cur_path)).read().splitlines()
         cur_path = os.path.abspath(os.path.dirname(__file__))
         path = os.path.join(cur_path, filename)
         lines = open(path).read().splitlines()
 
+        if is_train:
+            self.pre_parse_file(lines)
+
         www = self.weights_test
         if is_train:
             www = self.weights_train
         result = []
+        generated_file = open("sint_data_url_50freq.txt", "a")
         for line in lines:
-            new_line = self.parse_line(line, www, is_train)
+            new_line = self.parse_line(line, www, is_train, generated_file)
             result.append(new_line)
     
         result = [r for r in result if r is not None]
-        print(self.dict_req_meth)
+        #print(self.dict_req_meth)
+        print(len(self.dict_req_url))
+        print(self.dict_req_url_freq)
+
         return result
 
-    def parse_line(self, line, weights, is_train):
+    def parse_line(self, line, weights, is_train, generated_file):
         """
         Parses a log line to a list of ints
         :param line: line to parse
@@ -94,21 +110,76 @@ class LogParser:
             # Method #
             single_data.append(self.get_method(request, weights[1]))
             # URL #
-            single_data.append(self.get_url(request, weights[2]))
+            url = self.get_url(request, weights[2])
+            #############################
+            #self.generate_synt_data(generated_file, url, line)
+            #############################
+            single_data.append(url)
             # Status code #
             single_data.append(self.get_status_code(request, weights[3]))
             # Referred URL #
             # User agent #
 
             single_data.append(str(single_data[0])+str(single_data[2]))
-            if not is_train:
-                print(line)
-                print(single_data)
+            #if not is_train:
+                #print(line)
+                #print(single_data)
         except Exception as e:
             print(e)
             print("Parse error in line ", line)
             return None
         return single_data
+
+
+    def generate_synt_data(self, file, url, line):
+        if (url < 50):
+            file.write(line + "\n")
+
+    def pre_parse_line(self, line):
+        """
+        Pre-Parses a log line to a list of ints
+        :param line: line to parse
+        """
+        if len(line) != 0:
+
+            try:
+                line = line.strip()
+                # IP #
+
+                # Timestamp #
+
+                # Request #
+                request = self.get_request(line)
+                # Method #
+
+                # URL #
+                self.get_url_pre_parse(request)
+                # Status code #
+
+                # Referred URL #
+                # User agent #
+
+            except Exception as e:
+                print(e)
+                print("Pre-Parse error in line ", line)
+
+
+
+    def pre_parse_file(self, lines):
+        """
+                Parse file
+                :param lines: lines of the file
+                """
+        for line in lines:
+            self.pre_parse_line(line)
+        ## Parse URL
+        self.dict_req_url_freq = {k: v for k, v in sorted(self.dict_req_url_freq.items(), key=lambda item: item[1], reverse=True)}
+        print(self.dict_req_url_freq)
+        value = 0
+        for key in self.dict_req_url_freq:
+            self.dict_req_url_freq[key] = value
+            value += 1
+
 
     """============================== GET VARIABLES ================================"""
 
@@ -129,7 +200,8 @@ class LogParser:
         @param line: line to parse
         """
         time = line.split(' - - ')[1].split("]")[0].strip("[")
-        return self.parse_calendar_get_id(time[12:].split(' ')[0])
+        #return self.parse_calendar_get_id(time[12:].split(' ')[0])
+        return self.get_minute(time[12:].split(' ')[0])
 
     def get_request(self, line):
         """
@@ -157,8 +229,22 @@ class LogParser:
         @param weight: int
         """
         url = request[3]
-        self.parse_str_to_dict(self.dict_req_url, url, weight)
-        return self.dict_req_url[url]
+        url_list = url.split("/")
+        directory = url_list[1]
+        self.parse_str_to_dict_freq(self.dict_req_url, self.dict_req_url_freq, directory, weight)
+        return self.dict_req_url[directory]
+
+    def get_url_pre_parse(self, request):
+        """
+        Returns url of log
+        @param request: line to parse
+        @param weight: int
+        """
+        url = request[3]
+        url_list = url.split("/")
+        directory = url_list[1]
+        self.parse_str_to_dict_pre_parse(self.dict_req_url_freq, directory)
+        return self.dict_req_url_freq[directory]
 
     def get_status_code(self, request, weight):
         """
@@ -216,5 +302,36 @@ class LogParser:
                     dictionary[word] = 0
                 else:
                     dictionary[word] = (int(dictionary[list(dictionary)[len(dictionary)-1]]/step)+1)*step
+        finally:
+            return dictionary
+
+    def parse_str_to_dict_pre_parse(self, dict_freq, word):
+        """
+        Returns dictionary with new key.
+        @param dictionary: dictionary
+        @param word: str
+        """
+        try:
+            if word not in dict_freq:
+                if len(dict_freq) == 0:
+                    dict_freq[word] = 1
+                else:
+                    dict_freq[word] = 1
+            else:
+                dict_freq[word] = dict_freq[word] + 1
+        finally:
+            return dict_freq
+
+
+
+    def parse_str_to_dict_freq(self, dictionary, dict_freq, word, step):
+        """
+        Returns dictionary with new key.
+        @param dictionary: dictionary
+        @param word: str
+        """
+        try:
+            if word not in dictionary:
+                dictionary[word] = dict_freq[word]
         finally:
             return dictionary

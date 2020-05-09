@@ -1,0 +1,6 @@
+0 X-> HEAD en horario donde no hay
+1 X-> PUT, no hay PUT en train
+2 X-> POST donde no hay POST
+3 V-> POST donde sí hay POST
+4 V-> HEAD donde sí hay HEAD
+5 V-> GET, siempre hay GET
