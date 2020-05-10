@@ -77,7 +77,7 @@ class LogParser:
         if is_train:
             www = self.weights_train
         result = []
-        generated_file = open("sint_data_url_50freq.txt", "a")
+        generated_file = open("../sint_data_url_50freq.txt", "a")
         for line in lines:
             new_line = self.parse_line(line, www, is_train, generated_file)
             result.append(new_line)
@@ -284,7 +284,7 @@ class LogParser:
         self.parse_str_to_dict(self.dict_user_agent, user_agent, 1)
         return self.dict_user_agent[user_agent]
 
-    """============================== TEST DATA ================================"""
+    """============================== PARSE TO DICT ================================"""
 
     def parse_str_to_dict(self, dictionary, word, step):
         """

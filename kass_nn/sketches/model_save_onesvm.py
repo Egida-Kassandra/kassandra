@@ -1,20 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.font_manager
 from sklearn import svm
-from kass_nn.parse_logs import LogParser
+from kass_nn.util.parse_logs import LogParser
 import pandas as pd
 import time
-from sklearn.neighbors import LocalOutlierFactor
-import pickle
 # import eif as iso
 # from eif_old import iForest as iso
 # import eif_old as iso
 # https://stackabuse.com/scikit-learn-save-and-restore-models/
 
 from sklearn import preprocessing
-
-from sklearn.ensemble import IsolationForest
 
 if __name__ == '__main__':
     rng = np.random.RandomState(42)

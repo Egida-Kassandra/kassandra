@@ -192,7 +192,7 @@ def cross_distribution():
     logpar = LogParser()
 
     # Loading training data
-    train = load_data_pandas(logpar, 'train_logs/access3_features.log', True, columns)
+    train = load_data_pandas(logpar, '../train_logs/access3_features.log', True, columns)
 
     train.sort_values(by=[0], inplace=True)
     # X_train = load_data_float(data_pandas)
@@ -206,7 +206,7 @@ def cross_distribution():
     middle_point_C = (list(dictionary4)[0] - list(dictionary3)[-1]) / 2.0 + list(dictionary3)[-1]
 
     points_test = []
-    test = load_data_pandas(logpar, 'test_logs/BIG_TEST_TRANS2.txt', True, columns)
+    test = load_data_pandas(logpar, '../test_logs/BIG_TEST_TRANS2.txt', True, columns)
 
     test.sort_values(by=[0], inplace=True)
     print(test)
@@ -234,7 +234,7 @@ if __name__ == '__main__':
     columns = [0,5]
     
     # Loading training data
-    data_pandas = load_data_pandas(logpar, 'train_logs/access3_features.log', True, columns)
+    data_pandas = load_data_pandas(logpar, '../train_logs/access3_features.log', True, columns)
     X_train = load_data_float(data_pandas)
     np.random.seed(123)
     pca = decomposition.PCA(n_components=2)
@@ -242,7 +242,7 @@ if __name__ == '__main__':
     #X_train = pca.transform(X_train)
     
     # Loading testing data
-    datatest_pandas = load_data_pandas(logpar, 'test_logs/BIG_TEST_TRANS.txt', True, columns)
+    datatest_pandas = load_data_pandas(logpar, '../test_logs/BIG_TEST_TRANS.txt', True, columns)
     X_test = load_data_float(datatest_pandas)
     #pca.fit(X_test)
     #X_test = pca.transform(X_test)
