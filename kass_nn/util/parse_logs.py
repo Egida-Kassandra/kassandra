@@ -1,3 +1,4 @@
+from builtins import len
 from ctypes import c_ubyte
 from datetime import datetime
 import re
@@ -10,7 +11,7 @@ class LogParser:
     Clase que se encarga de transformar los archivos de log en arrays numericos
     """
 
-    def __init__(self):
+    def __init__(self, filename):
         """Constructor"""
         self.dict_ip = {}
         self.dict_req_meth = {}
@@ -27,9 +28,16 @@ class LogParser:
         }
 
         self.dict_req_url_freq = {}
+        self.dict_file_ext = {}
+        self.dict_file_ext_freq = {}
+        self.dict_req_len = {}
+        self.dict_req_len_freq = {}
 
         self.weights_train = [1,1,20,500,1,1,1]
         self.weights_test = [1,1,20,500,1,1,1]
+
+        self.parsed_train_data = []
+        self.parsed_train_data = self.parse_file(filename, True)
 
     def parse_calendar_get_id(self, date_string):
         """
@@ -53,7 +61,7 @@ class LogParser:
         :param current_hour: datetime
         :param range: list of datetimes
         """
-        if(range[0] <= current_hour and current_hour <= range[1]):
+        if range[0] <= current_hour <= range[1]:
             return True
         return False
 
@@ -83,9 +91,10 @@ class LogParser:
             result.append(new_line)
     
         result = [r for r in result if r is not None]
-        #print(self.dict_req_meth)
-        print(len(self.dict_req_url))
-        print(self.dict_req_url_freq)
+
+        #print(self.dict_file_ext_freq)
+        #print(self.dict_req_url_freq)
+        #print(self.dict_req_len)
 
         return result
 
@@ -120,7 +129,14 @@ class LogParser:
             # Referred URL #
             # User agent #
 
-            single_data.append(str(single_data[0])+str(single_data[2]))
+            # File extension
+            single_data.append(self.get_file_extension(request))
+
+            # Request length
+            single_data.append(self.get_req_len(request))
+
+            #print(single_data)
+            #single_data.append(str(single_data[0])+str(single_data[2]))
             #if not is_train:
                 #print(line)
                 #print(single_data)
@@ -159,6 +175,12 @@ class LogParser:
                 # Referred URL #
                 # User agent #
 
+                # File extension
+                self.get_file_ext_pre_parse(request)
+
+                # Request length
+                #self.get_req_len_preparse(request)
+
             except Exception as e:
                 print(e)
                 print("Pre-Parse error in line ", line)
@@ -173,12 +195,19 @@ class LogParser:
         for line in lines:
             self.pre_parse_line(line)
         ## Parse URL
-        self.dict_req_url_freq = {k: v for k, v in sorted(self.dict_req_url_freq.items(), key=lambda item: item[1], reverse=True)}
-        print(self.dict_req_url_freq)
+        #self.dict_req_url_freq = {k: v for k, v in sorted(self.dict_req_url_freq.items(), key=lambda item: item[1], reverse=True)}
+        self.dict_req_url_freq = self.parse_frequencies(self.dict_req_url_freq)
+        self.dict_file_ext_freq = self.parse_frequencies(self.dict_file_ext_freq)
+        #self.dict_req_len_freq = self.parse_frequencies(self.dict_req_len_freq)
+
+
+    def parse_frequencies(self, dict):
+        dict = {k: v for k, v in sorted(dict.items(), key=lambda item: item[1], reverse=True)}
         value = 0
-        for key in self.dict_req_url_freq:
-            self.dict_req_url_freq[key] = value
+        for key in dict:
+            dict[key] = value
             value += 1
+        return dict
 
 
     """============================== GET VARIABLES ================================"""
@@ -222,6 +251,17 @@ class LogParser:
         self.parse_str_to_dict(self.dict_req_meth, method, weight)
         return self.dict_req_meth[method]
 
+    def get_url_pre_parse(self, request):
+        """
+        Returns url of log
+        @param request: line to parse
+        """
+        url = request[3]
+        url_list = url.split("/")
+        directory = url_list[1]
+        self.parse_str_to_dict_pre_parse(self.dict_req_url_freq, directory)
+        return self.dict_req_url_freq[directory]
+
     def get_url(self, request, weight):
         """
         Returns url of log
@@ -234,17 +274,7 @@ class LogParser:
         self.parse_str_to_dict_freq(self.dict_req_url, self.dict_req_url_freq, directory, weight)
         return self.dict_req_url[directory]
 
-    def get_url_pre_parse(self, request):
-        """
-        Returns url of log
-        @param request: line to parse
-        @param weight: int
-        """
-        url = request[3]
-        url_list = url.split("/")
-        directory = url_list[1]
-        self.parse_str_to_dict_pre_parse(self.dict_req_url_freq, directory)
-        return self.dict_req_url_freq[directory]
+
 
     def get_status_code(self, request, weight):
         """
@@ -284,6 +314,74 @@ class LogParser:
         self.parse_str_to_dict(self.dict_user_agent, user_agent, 1)
         return self.dict_user_agent[user_agent]
 
+
+    def get_file_ext_pre_parse(self, request):
+        """
+        Returns url of log
+        @param request: line to parse
+        """
+        url = request[3]
+        try:
+            possible_extension = re.split("[? | %]", url)[0].split(".")
+            if len(possible_extension) > 1:
+                extension = possible_extension[-1].strip("/").lower()
+                self.parse_str_to_dict_pre_parse(self.dict_file_ext_freq, extension)
+                return self.dict_file_ext_freq[extension]
+            else:
+                return -1
+        except Exception as e:
+            return -1
+
+    def get_file_extension(self, request):
+        """
+
+        @param request: line to parse
+        """
+        url = request[3]
+        try:
+            possible_extension = re.split("[? | %]", url)[0].split(".")
+            if len(possible_extension) > 1:
+                extension = possible_extension[-1].strip("/").lower()
+                self.parse_str_to_dict_freq(self.dict_file_ext, self.dict_file_ext_freq, extension, 0)
+                return self.dict_file_ext[extension]
+            else:
+                return -1
+        except Exception as e:
+            return -1
+
+    def get_req_len_preparse(self, request):
+        """
+        Returns url of log
+        @param request: line to parse
+        """
+        url = request[3]
+        length = len(url)
+        self.parse_str_to_dict_pre_parse(self.dict_req_len_freq, length)
+        return self.dict_req_len_freq[length]
+
+    def get_req_len(self, request):
+        """
+
+        @param request: line to parse
+        """
+        """
+        url = request[3]
+        length = len(url)
+        self.parse_str_to_dict_freq(self.dict_req_len, self.dict_req_len_freq, length, 0)
+        """
+        url = request[3]
+        length = len(url)
+        str_len = str(length)
+        #self.parse_str_to_dict(self.dict_req_len, length, 1)
+        try:
+            if str_len not in self.dict_req_len:
+                self.dict_req_len[str_len] = length
+        except Exception as e:
+            print(e)
+            return self.dict_req_len
+        return self.dict_req_len[str_len]
+
+
     """============================== PARSE TO DICT ================================"""
 
     def parse_str_to_dict(self, dictionary, word, step):
@@ -321,8 +419,6 @@ class LogParser:
                 dict_freq[word] = dict_freq[word] + 1
         finally:
             return dict_freq
-
-
 
     def parse_str_to_dict_freq(self, dictionary, dict_freq, word, step):
         """

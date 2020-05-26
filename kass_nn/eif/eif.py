@@ -9,7 +9,7 @@ from kass_nn.util import translate_to_circumference as circ
 
 
 def train_model(X_train):
-    print("TRAINING")
+    print("\tTRAINING")
     # Train block
     clf = iso.iForest(X_train, ntrees=2000, sample_size=1000, ExtensionLevel=1)  # 2000, 15000, ext 1 ###### cuidaooo
 
@@ -21,8 +21,8 @@ def train_model(X_train):
         """
     return clf
 
-def predict(X_test, clf, X_train):
-    print("PREDICTING")
+def predict_w_train(X_test, clf, X_train):
+    print("\tPREDICTING")
     # Predict block
     anomaly_scores = clf.compute_paths(X_test)
     anomaly_scores_sorted = np.argsort(anomaly_scores)
@@ -31,15 +31,21 @@ def predict(X_test, clf, X_train):
     print(np.sort(anomaly_scores))
     return anomaly_scores
 
+def predict_wo_train(X_test, clf):
+    print("\tPREDICTING")
+    # Predict block
+    anomaly_scores = clf.compute_paths(X_test)
+    return anomaly_scores
+
 
 def predict_plot_hours(X_test, clf, X_train):
-    print("PREDICTING")
+    print("\tPREDICTING")
     # Predict block
     anomaly_scores = clf.compute_paths(X_test)
     anomaly_scores_sorted = np.argsort(anomaly_scores)
     indices_with_preds = anomaly_scores_sorted[-int(np.ceil(0.9 * X_train.shape[0])):]
-    print(indices_with_preds)
-    print(np.sort(anomaly_scores))
+    #print(indices_with_preds)
+    #print(np.sort(anomaly_scores))
     return anomaly_scores
 
 
@@ -57,13 +63,16 @@ def load_data_pandas(filename, is_train, logpar, columns):
     :param filename: name of the file
     :param is_train: boolean, if the file has training or testing logs
     """
-
+    if is_train:
+        return pd.DataFrame(logpar.parsed_train_data)[columns]
     data_train = logpar.parse_file(filename, is_train)
     return pd.DataFrame(data_train)[columns]
 
 
-def load_parsed_data(filename, is_train, logpar, columns, radius1, radius2):
-    train = load_data_pandas(filename, is_train, logpar, columns)
-    data_pandas = pd.DataFrame(circ.parse_sc_to_scp(train, columns, radius1, radius2))
+def load_parsed_data(filename, is_train, charac):
+    train = load_data_pandas(filename, is_train, charac.logpar, charac.columns)
+    train = train.drop(train[(train[charac.columns[0]] < 0) | (train[charac.columns[1]] < 0)].index)
+    data_pandas = pd.DataFrame(circ.parse_sc_to_scp(train, charac))
+
     X_train = load_data_float(data_pandas)
     return X_train

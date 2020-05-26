@@ -9,6 +9,7 @@ def plot_model(X_train, X_test, anomaly_scores, clf, mesh):
     # Plot block
     data_pandas = pd.DataFrame(X_train)
     datatest_pandas = pd.DataFrame(X_test)
+    #print(X_test)
     plot_data(data_pandas, datatest_pandas, 0, 1, anomaly_scores, clf, mesh)
 
 
