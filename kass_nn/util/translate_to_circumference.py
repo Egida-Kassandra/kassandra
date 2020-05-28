@@ -23,12 +23,16 @@ def parse_sc_to_scp(data_pandas, charac):
     col1 = charac.columns[0]
     col2 = charac.columns[1]
     for index, row in data_pandas.iterrows():
+        new_point = []
         if 0 <= row[col1] < 360 or 1080 < row[1] <= 1440:
-            points.append(get_scp_point_A(row[col1], charac.radius1 + charac.radius2 * row[col2]))
+            new_point = get_scp_point_A(row[col1], charac.radius1 + charac.radius2 * row[col2])
         elif 360 < row[col1] < 1080:
-            points.append(get_scp_point_B(row[col1], charac.radius1 + charac.radius2 * row[col2]))
+            new_point = get_scp_point_B(row[col1], charac.radius1 + charac.radius2 * row[col2])
         elif row[1] == 360:
-            points.append([0, math.sqrt(charac.radius1 + charac.radius2 * row[col2])])
+            new_point = [0, math.sqrt(charac.radius1 + charac.radius2 * row[col2])]
         elif row[1] == 1080:
-            points.append([0, -math.sqrt(charac.radius1 + charac.radius2 * row[col2])])
+            new_point = [0, -math.sqrt(charac.radius1 + charac.radius2 * row[col2])]
+        for i in range (2, len(charac.columns)):
+            new_point.append(row[charac.columns[i]])
+        points.append(new_point)
     return points

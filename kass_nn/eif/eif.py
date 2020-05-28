@@ -10,8 +10,14 @@ from kass_nn.util import translate_to_circumference as circ
 
 def train_model(X_train):
     print("\tTRAINING")
+    X_train = pd.DataFrame(X_train)
+    X_train = load_data_float(X_train)
     # Train block
-    clf = iso.iForest(X_train, ntrees=2000, sample_size=1000, ExtensionLevel=1)  # 2000, 15000, ext 1 ###### cuidaooo
+    train_len = len(X_train)
+    if train_len > 1000:
+        clf = iso.iForest(X_train, ntrees=2000, sample_size=1000, ExtensionLevel=1)  # 2000, 15000, ext 1 ###### cuidaooo
+    else:
+        clf = iso.iForest(X_train, ntrees=5000, sample_size=train_len, ExtensionLevel=1)
 
     # Save block
     """
@@ -31,9 +37,13 @@ def predict_w_train(X_test, clf, X_train):
     print(np.sort(anomaly_scores))
     return anomaly_scores
 
-def predict_wo_train(X_test, clf):
+
+def predict_wo_train(X_test, clf, cols):
     print("\tPREDICTING")
+    pd.DataFrame(X_test)
     # Predict block
+    X_test = np.array(X_test).astype(np.float)
+    print(X_test)
     anomaly_scores = clf.compute_paths(X_test)
     return anomaly_scores
 
@@ -71,8 +81,36 @@ def load_data_pandas(filename, is_train, logpar, columns):
 
 def load_parsed_data(filename, is_train, charac):
     train = load_data_pandas(filename, is_train, charac.logpar, charac.columns)
-    train = train.drop(train[(train[charac.columns[0]] < 0) | (train[charac.columns[1]] < 0)].index)
-    data_pandas = pd.DataFrame(circ.parse_sc_to_scp(train, charac))
+    print(train)
+    if len(charac.columns) == 2: # Two columns
+        train = train.drop(train[(train[charac.columns[0]] < 0) | (train[charac.columns[1]] < 0)].index)
+    elif len(charac.columns) == 3: # Three columns
+        train = train.drop(train[(train[charac.columns[0]] < 0) | (train[charac.columns[1]] < 0) | (train[charac.columns[2]] < 0)].index)
+    print("FROM LOAD PARSED DATA")
+    if is_train:
+        if len(charac.columns) == 2:
+            print("Two cols")
+            X_train = circ.parse_sc_to_scp(train, charac)
+        else:
+            print("Three cols")
+            X_train = group_by(circ.parse_sc_to_scp(train, charac), charac)
+    else:
+        X_train = circ.parse_sc_to_scp(train, charac)
 
-    X_train = load_data_float(data_pandas)
     return X_train
+
+
+def group_by(data, charac):
+    grouped_lists = {}
+    print("FROM GROUP BY")
+    for log in data:
+        log_array = [log[0], log[1]]
+        criteria = charac.get_group_criteria(log)
+        if criteria not in grouped_lists:
+            grouped_lists[criteria] = [log_array]
+        else:
+            grouped_lists[criteria].append(log_array)
+            #print(log)
+
+    return grouped_lists
+

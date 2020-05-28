@@ -1,16 +1,17 @@
-from sympy import var, solve, Eq
+from sympy import var, solve, Eq, subfactorial
 import math
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 
-def plot_model(X_train, X_test, anomaly_scores, clf, mesh):
+def plot_model(fig, X_train, X_test, anomaly_scores, clf, mesh, subplot_value, chart_name):
     # Plot block
+
     data_pandas = pd.DataFrame(X_train)
     datatest_pandas = pd.DataFrame(X_test)
     #print(X_test)
-    plot_data(data_pandas, datatest_pandas, 0, 1, anomaly_scores, clf, mesh)
+    plot_data(fig, data_pandas, datatest_pandas, 0, 1, anomaly_scores, clf, mesh, subplot_value, chart_name)
 
 
 def plot_model_hours(X_train, X_test, anomaly_scores, clf, mesh):
@@ -20,8 +21,13 @@ def plot_model_hours(X_train, X_test, anomaly_scores, clf, mesh):
     extra_points = get_hour_points()
     plot_data_hours(data_pandas, datatest_pandas, 0, 1, anomaly_scores, clf, mesh, extra_points)
 
+def open_plot():
+    f = plt.figure(figsize=(8, 8))
+    f.subplots_adjust(left=0.09, bottom=0.1, right=0.95, top=0.95, wspace=0.2, hspace=0.2)
+    return f
 
-def plot_data(data_train, data_test, col_X, colY, anomaly_scores, clf, mesh):
+
+def plot_data(fig, data_train, data_test, col_X, colY, anomaly_scores, clf, mesh, subplot_value, chart_name):
     """
     Plots 2D data set training and testing
     :param data_train: pandas data frame train
@@ -37,8 +43,9 @@ def plot_data(data_train, data_test, col_X, colY, anomaly_scores, clf, mesh):
     S0 = clf.compute_paths(np.c_[xx.ravel(), yy.ravel()])
     S0 = S0.reshape(xx.shape)
     ss0 = np.argsort(anomaly_scores)
-    f = plt.figure(figsize=(15, 6))
-    ax1 = f.add_subplot(121)
+    #f = plt.figure(figsize=(15, 6))
+
+    ax1 = fig.add_subplot(subplot_value[0], subplot_value[1], subplot_value[2])
     levels = np.linspace(np.min(S0), np.max(S0), 5)
     CS = ax1.contourf(xx, yy, S0, levels, cmap=plt.cm.YlOrRd)
 
@@ -53,11 +60,11 @@ def plot_data(data_train, data_test, col_X, colY, anomaly_scores, clf, mesh):
     plt.scatter(x, y, s=5, c='m', edgecolor='m')
     plt.scatter(x[ss0[-3:]], y[ss0[-3:]], s=5, c='c')
     plt.scatter(x[ss0[:3]], y[ss0[:3]], s=5, c='k')
-    plt.title('extended')
-    plt.show()
+    plt.title(chart_name)
 
-    plt.show()
 
+def close_plot():
+    plt.show()
 
 def plot_data_hours(data_train, data_test, col_X, colY, anomaly_scores, clf, mesh, extra_points):
     """

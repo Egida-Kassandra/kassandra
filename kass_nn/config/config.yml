@@ -1,0 +1,4 @@
+value_min_meth: 0.25
+value_min_dir: 0.25
+value_min_file_ext: 0.25
+value_min_long: 0.25

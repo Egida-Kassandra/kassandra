@@ -15,6 +15,7 @@ class MinMeth:
         self.logpar = logpar
         self.X_train = []
         self.X_test = []
+        self.clf = None
 
 
 

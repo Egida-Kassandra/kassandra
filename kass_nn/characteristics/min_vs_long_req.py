@@ -11,10 +11,11 @@ class MinLong:
         self.columns = [1, 6]
         self.radius1 = 500000
         self.radius2 = 100000
-        self.mesh = 6100
+        self.mesh = 6400
         self.logpar = logpar
         self.X_train = []
         self.X_test = []
+        self.clf = None
 
 
 if __name__ == '__main__':
