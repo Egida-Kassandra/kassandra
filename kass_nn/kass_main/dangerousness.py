@@ -6,6 +6,7 @@ border_2 = 0.60
 border_3 = 0.65
 border_4 = 0.70
 
+dict_ponds = {0: "value_min_meth", 1: "value_min_dir", 2: "value_min_file_ext", 3: "value_min_long"}
 
 
 def get_dangerousness_int(anomaly_value):
@@ -22,15 +23,45 @@ def get_dangerousness_int(anomaly_value):
     elif border_4 <= anomaly_value:
         return 5
 
+
 def get_dangerousness_label(anomaly_values):
     anom_value = get_dangerousness(anomaly_values)
-    return "Full anomaly value: {}\nDangerousness in range [0-5]: {}".format(anom_value, get_dangerousness_int(anom_value))
+    return "Full anomaly value: {}\nDangerousness in range [0-5]: {}".format(anom_value,
+                                                                             get_dangerousness_int(anom_value))
+
 
 def get_dangerousness(anomaly_values):
     yaml_document = open("../config/config.yml")
     danger_values = yaml.safe_load(yaml_document)
-    result = anomaly_values[0] * danger_values["value_min_meth"] + anomaly_values[1] * danger_values["value_min_dir"] \
-             + anomaly_values[2] * danger_values["value_min_file_ext"] + anomaly_values[3] * danger_values["value_min_long"]
+    dang_pond_extra = danger_values["dangerous_value_extra"]
 
+    none_values_rest = 0
+    none_values_num = 0
+    i = 0
+    for val in anomaly_values:
+        if val is None:
+            none_values_rest += danger_values[dict_ponds[i]]
+            none_values_num += 1
+        i += 1
+    none_value_pond = none_values_rest / (len(anomaly_values) - none_values_num)
+
+    anomaly_values = [r for r in anomaly_values if r is not None]
+    dang_num = len([r for r in anomaly_values if r >= border_3])
+
+    dang_pond = 0
+    if dang_num > 0 and len(anomaly_values) is not dang_num:
+        dang_pond = dang_pond_extra
+        dang_value_pond = (dang_pond * dang_num) / (len(anomaly_values) - dang_num)
+    else:
+        dang_value_pond = 0
+    result = 0
+    i = 0
+    for val in anomaly_values:
+        add_value = danger_values[dict_ponds[i]] + none_value_pond
+        if val >= border_3:
+            result += val * (add_value + dang_pond)
+        else:
+            result += val * (add_value - dang_value_pond)
+
+        i += 1
     return result
-

@@ -10,7 +10,6 @@ def plot_model(fig, X_train, X_test, anomaly_scores, clf, mesh, subplot_value, c
 
     data_pandas = pd.DataFrame(X_train)
     datatest_pandas = pd.DataFrame(X_test)
-    #print(X_test)
     plot_data(fig, data_pandas, datatest_pandas, 0, 1, anomaly_scores, clf, mesh, subplot_value, chart_name)
 
 
@@ -38,12 +37,10 @@ def plot_data(fig, data_train, data_test, col_X, colY, anomaly_scores, clf, mesh
     :param clf: model
     """
 
-    # mesh = 1500
     xx, yy = np.meshgrid(np.linspace(-mesh, mesh, 50), np.linspace(-mesh, mesh, 50))
     S0 = clf.compute_paths(np.c_[xx.ravel(), yy.ravel()])
     S0 = S0.reshape(xx.shape)
     ss0 = np.argsort(anomaly_scores)
-    #f = plt.figure(figsize=(15, 6))
 
     ax1 = fig.add_subplot(subplot_value[0], subplot_value[1], subplot_value[2])
     levels = np.linspace(np.min(S0), np.max(S0), 5)
@@ -77,7 +74,6 @@ def plot_data_hours(data_train, data_test, col_X, colY, anomaly_scores, clf, mes
     :param clf: model
     """
 
-    # mesh = 1500
     xx, yy = np.meshgrid(np.linspace(-mesh, mesh, 50), np.linspace(-mesh, mesh, 50))
     S0 = clf.compute_paths(np.c_[xx.ravel(), yy.ravel()])
     S0 = S0.reshape(xx.shape)

@@ -1,34 +1,24 @@
 import numpy as np
 import eif as iso
 import pandas as pd
-import kass_nn.util.translate_to_circumference as circ
-#import kass_nn.util.kass_plotter as plt
-
-from kass_nn.util import kass_plotter as plt
 from kass_nn.util import translate_to_circumference as circ
 
 
-def train_model(X_train):
+def train_model(X_train, characteristic):
     print("\tTRAINING")
     X_train = pd.DataFrame(X_train)
     X_train = load_data_float(X_train)
     # Train block
     train_len = len(X_train)
     if train_len > 1000:
-        clf = iso.iForest(X_train, ntrees=2000, sample_size=1000, ExtensionLevel=1)  # 2000, 15000, ext 1 ###### cuidaooo
+        clf = iso.iForest(X_train, ntrees=characteristic.ntrees, sample_size=characteristic.sample_size, ExtensionLevel=1)  # 2000, 15000, ext 1 ###### cuidaooo || 1000 2000
     else:
         clf = iso.iForest(X_train, ntrees=5000, sample_size=train_len, ExtensionLevel=1)
-
-    # Save block
-    """
-    pickle.dumps(self.clf)
-    with open('min_vs_meth.kass', 'wb') as model_file:
-        pickle.dump(self.clf, model_file)
-        """
     return clf
 
 def predict_w_train(X_test, clf, X_train):
     print("\tPREDICTING")
+    X_test = np.array(X_test).astype(np.float)
     # Predict block
     anomaly_scores = clf.compute_paths(X_test)
     anomaly_scores_sorted = np.argsort(anomaly_scores)
@@ -38,14 +28,15 @@ def predict_w_train(X_test, clf, X_train):
     return anomaly_scores
 
 
-def predict_wo_train(X_test, clf, cols):
+def predict_wo_train(X_test, clf):
     print("\tPREDICTING")
-    pd.DataFrame(X_test)
     # Predict block
     X_test = np.array(X_test).astype(np.float)
-    print(X_test)
-    anomaly_scores = clf.compute_paths(X_test)
-    return anomaly_scores
+    anomaly_scores = [None]
+    try:
+        anomaly_scores = clf.compute_paths(X_test)
+    finally:
+        return anomaly_scores
 
 
 def predict_plot_hours(X_test, clf, X_train):
@@ -54,8 +45,6 @@ def predict_plot_hours(X_test, clf, X_train):
     anomaly_scores = clf.compute_paths(X_test)
     anomaly_scores_sorted = np.argsort(anomaly_scores)
     indices_with_preds = anomaly_scores_sorted[-int(np.ceil(0.9 * X_train.shape[0])):]
-    #print(indices_with_preds)
-    #print(np.sort(anomaly_scores))
     return anomaly_scores
 
 
@@ -80,19 +69,16 @@ def load_data_pandas(filename, is_train, logpar, columns):
 
 
 def load_parsed_data(filename, is_train, charac):
+    print("\tLOADING DATA")
     train = load_data_pandas(filename, is_train, charac.logpar, charac.columns)
-    print(train)
     if len(charac.columns) == 2: # Two columns
         train = train.drop(train[(train[charac.columns[0]] < 0) | (train[charac.columns[1]] < 0)].index)
     elif len(charac.columns) == 3: # Three columns
         train = train.drop(train[(train[charac.columns[0]] < 0) | (train[charac.columns[1]] < 0) | (train[charac.columns[2]] < 0)].index)
-    print("FROM LOAD PARSED DATA")
     if is_train:
         if len(charac.columns) == 2:
-            print("Two cols")
             X_train = circ.parse_sc_to_scp(train, charac)
         else:
-            print("Three cols")
             X_train = group_by(circ.parse_sc_to_scp(train, charac), charac)
     else:
         X_train = circ.parse_sc_to_scp(train, charac)
@@ -110,7 +96,5 @@ def group_by(data, charac):
             grouped_lists[criteria] = [log_array]
         else:
             grouped_lists[criteria].append(log_array)
-            #print(log)
-
     return grouped_lists
 

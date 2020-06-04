@@ -71,7 +71,6 @@ class LogParser:
         :param filename: name of the file
         :param is_train: boolean
         """
-
         #cur_path = os.path.dirname(__file__)
         #lines = open(os.path.relpath(filename, cur_path)).read().splitlines()
         cur_path = os.path.abspath(os.path.dirname(__file__))
@@ -91,11 +90,6 @@ class LogParser:
             result.append(new_line)
     
         result = [r for r in result if r is not None]
-
-        #print(self.dict_file_ext_freq)
-        #print(self.dict_req_url_freq)
-        #print(self.dict_req_len)
-
         return result
 
     def parse_line(self, line, weights, is_train, generated_file):
@@ -134,12 +128,6 @@ class LogParser:
 
             # Request length
             single_data.append(self.get_req_len(request))
-
-            #print(single_data)
-            #single_data.append(str(single_data[0])+str(single_data[2]))
-            #if not is_train:
-                #print(line)
-                #print(single_data)
         except Exception as e:
             print(e)
             print("Parse error in line ", line)
@@ -161,9 +149,7 @@ class LogParser:
             try:
                 line = line.strip()
                 # IP #
-
                 # Timestamp #
-
                 # Request #
                 request = self.get_request(line)
                 # Method #
@@ -171,7 +157,6 @@ class LogParser:
                 # URL #
                 self.get_url_pre_parse(request)
                 # Status code #
-
                 # Referred URL #
                 # User agent #
 

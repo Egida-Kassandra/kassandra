@@ -60,14 +60,14 @@ class TrainPredict:
 
     def plot_dangerousness(self, min_meth_pred, min_dir_pred, min_file_ext_pred, min_long_pred):
         fig = plt.open_plot()
-
         plt.plot_model(fig, self.min_meth.X_train, self.min_meth.X_test, min_meth_pred, self.min_meth.clf,
                        self.min_meth.mesh, [2, 2, 1], "Min vs Meth")
         plt.plot_model(fig, self.min_dir.X_train, self.min_dir.X_test, min_dir_pred, self.min_dir.clf,
                        self.min_dir.mesh, [2, 2, 2], "Min vs Dir")
-        plt.plot_model(fig, self.min_file_ext.X_train, self.min_file_ext.X_test, min_file_ext_pred,
-                       self.min_file_ext.clf,
-                       self.min_file_ext.mesh, [2, 2, 3], "Min vs FileExt")
+        if min_file_ext_pred is not None:
+            plt.plot_model(fig, self.min_file_ext.X_train, self.min_file_ext.X_test, min_file_ext_pred,
+                           self.min_file_ext.clf,
+                           self.min_file_ext.mesh, [2, 2, 3], "Min vs FileExt")
         plt.plot_model(fig, self.min_long.X_train, self.min_long.X_test, min_long_pred, self.min_long.clf,
                        self.min_long.mesh, [2, 2, 4], "Min vs Long")
 

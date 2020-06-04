@@ -6,7 +6,7 @@ def get_eif(charac):
     X_train = eif.load_parsed_data("", True, charac)
     charac.X_train = X_train
     # Training model
-    clf = eif.train_model(X_train)
+    clf = eif.train_model(X_train, charac)
     # Return model
     return clf
 
