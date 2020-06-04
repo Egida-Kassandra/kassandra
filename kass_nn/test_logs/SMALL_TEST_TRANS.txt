@@ -1,3 +1,0 @@
-12.12.12.12 - - [13/Apr/2012:11:03:09 +0100] "GET / HTTP/1.1" 403 4399 "-" "Mozilla/5.0 (compatible; aiHitBot/1.1; +http://www.aihit.com/)"
-12.12.12.12 - - [13/Apr/2012:11:03:09 +0100] "GET / HTTP/1.1" 200 4399 "-" "Mozilla/5.0 (compatible; aiHitBot/1.1; +http://www.aihit.com/)"
-12.12.12.12 - - [13/Apr/2012:11:03:09 +0100] "GET / HTTP/1.1" 500 4399 "-" "Mozilla/5.0 (compatible; aiHitBot/1.1; +http://www.aihit.com/)"

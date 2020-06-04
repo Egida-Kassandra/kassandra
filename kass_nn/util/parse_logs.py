@@ -54,7 +54,6 @@ class LogParser:
         current_hour = datetime.strptime(date_string, '%H:%M:%S')
         return current_hour.hour*60 + current_hour.minute
 
-
     def is_hour_in_range(self, current_hour, range):
         """
         Returns if a determined hour is in range hour passed as param

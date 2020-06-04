@@ -20,6 +20,7 @@ def plot_model_hours(X_train, X_test, anomaly_scores, clf, mesh):
     extra_points = get_hour_points()
     plot_data_hours(data_pandas, datatest_pandas, 0, 1, anomaly_scores, clf, mesh, extra_points)
 
+
 def open_plot():
     f = plt.figure(figsize=(8, 8))
     f.subplots_adjust(left=0.09, bottom=0.1, right=0.95, top=0.95, wspace=0.2, hspace=0.2)
