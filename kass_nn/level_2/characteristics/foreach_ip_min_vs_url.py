@@ -1,15 +1,14 @@
 import yaml
-from numpy import chararray
-
-from kass_nn.level_2.eif import eif
+from kass_nn.level_2.eif_module import eif
 from kass_nn.level_2.danger_labeling.dangerousness import get_dangerousness_int
 from kass_nn.util.parse_logs import LogParser
 from kass_nn.util import kass_plotter as plt
-import numpy as np
+from kass_nn.util import load_parsed_logs as lp
+
 
 
 class IPMinURL:
-    def __init__(self, logpar):
+    def __init__(self, logpar, config_file):
         """Constructor"""
         self.clf = None
         self.X_train = None
@@ -21,10 +20,10 @@ class IPMinURL:
         self.X_train = []
         self.X_test = []
         self.clfs_by_ip = {}
-        self.read_params()
+        self.read_params(config_file)
 
-    def read_params(self):
-        yaml_document = open("../config/config.yml")
+    def read_params(self, config_file):
+        yaml_document = open(config_file)
         params = yaml.safe_load(yaml_document)
         self.ntrees = params["ntrees_min_long"]
         self.sample_size = params["sample_size_min_long"]
@@ -39,16 +38,17 @@ class IPMinURL:
 
 if __name__ == '__main__':
 
-    train_filename = "../train_logs/foreach_ip_url/train_foreach_ip_url_spec.log"
-    test_filename = "../test_logs/foreach_ip_min_vs_url/BIG_TEST_TRANS_foreach_ip_min_vs_url.txt"
+    train_filename = "../level_2/train_logs/foreach_ip_url/train_foreach_ip_url_spec.log"
+    test_filename = "../level_2/test_logs/foreach_ip_min_vs_url/BIG_TEST_TRANS_foreach_ip_min_vs_url.txt"
+    config_file = "../../config/config.yml"
     logpar = LogParser(train_filename)
-    characteristic = IPMinURL(logpar)
+    characteristic = IPMinURL(logpar, config_file)
 
     # Loading training data
-    X_train = eif.load_parsed_data(train_filename, True, characteristic)
+    X_train = lp.load_parsed_data(train_filename, True, characteristic)
 
     # Loading testing data
-    X_test = eif.load_parsed_data(test_filename, False, characteristic)
+    X_test = lp.load_parsed_data(test_filename, False, characteristic)
 
     # Training model
     if isinstance(X_train, dict):

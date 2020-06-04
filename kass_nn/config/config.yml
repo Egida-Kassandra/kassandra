@@ -1,0 +1,43 @@
+##################################### LEVEL 2 ##############################################
+# Values [0-1]
+# Each must be in [0-1] and all must sum 1
+danger_ip: 0.25
+danger_meth: 0.25
+danger_url: 0.25
+danger_ip_meth: 0.0625
+danger_meth_url: 0.0625
+danger_ip_url: 0.0625
+danger_ip_meth_url: 0.0625
+
+##################################### LEVEL 2 ##############################################
+################################# CHARACTERISTICS ##########################################
+#   Number of generated trees
+ntrees_min_meth: 2000
+ntrees_min_dir: 2000
+ntrees_min_file_ext: 1000
+ntrees_min_long: 1000
+ntrees_foreach_ip_url: 1000
+#   Size of subset of data to generate a tree
+sample_size_min_meth: 1000
+sample_size_min_dir: 10000
+sample_size_min_file_ext: 1000
+sample_size_min_long: 1000
+sample_size_foreach_ip_url: 1100
+#   Mesh for plotting
+mesh_min_meth: 1500
+mesh_min_dir: 2100
+mesh_min_file_ext: 2000
+mesh_min_long: 4000
+mesh_foreach_ip_url: 2000
+################################# DANGER VALUES ##########################################
+#   Weight for each value
+# Each must be in [0-1] and all must sum 1
+value_min_meth: 0.25
+value_min_dir: 0.25
+value_min_file_ext: 0.25
+value_min_long: 0.25
+# Values [0-1]
+value_foreach_ip_url: 0.25
+#   Extra weigh to dangerous values
+# Values [0-1]
+dangerous_value_extra: 0.2

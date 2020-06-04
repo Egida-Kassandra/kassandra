@@ -33,6 +33,11 @@ class LogParser:
         self.dict_req_len = {}
         self.dict_req_len_freq = {}
 
+        self.comb_list_ip_meth = []
+        self.comb_list_meth_url = []
+        self.comb_list_ip_url = []
+        self.comb_list_ip_meth_url = []
+
         self.weights_train = [1,1,20,500,1,1,1]
         self.weights_test = [1,1,20,500,1,1,1]
 
@@ -83,7 +88,7 @@ class LogParser:
         if is_train:
             www = self.weights_train
         result = []
-        generated_file = open("../sint_data_url_50freq.txt", "a")
+        generated_file = None #open("../sint_data_url_50freq.txt", "a")
         for line in lines:
             new_line = self.parse_line(line, www, is_train, generated_file)
             result.append(new_line)
@@ -127,6 +132,14 @@ class LogParser:
 
             # Request length
             single_data.append(self.get_req_len(request))
+
+            # Combined dicts
+            combined_str = self.get_combined_strings(line)
+            if combined_str[0] not in self.comb_list_meth_url:
+                self.comb_list_ip_meth.append(combined_str[0])
+                self.comb_list_meth_url.append(combined_str[1])
+                self.comb_list_ip_url.append(combined_str[2])
+                self.comb_list_ip_meth_url.append(combined_str[3])
         except Exception as e:
             print(e)
             print("Parse error in line ", line)
@@ -193,6 +206,45 @@ class LogParser:
             value += 1
         return dict
 
+    """=========================== GET STRING VARIABLES ============================"""
+
+    def get_string_variables(self, filename):
+        """
+        Parse file
+        :param filename: name of the file
+        """
+        cur_path = os.path.abspath(os.path.dirname(__file__))
+        path = os.path.join(cur_path, filename)
+        lines = open(path).read().splitlines()
+        result = []
+        for line in lines:
+            line = line.strip()
+            new_line = self.get_string_log_list(line)
+            result.append(new_line)
+        result = [r for r in result if r is not None]
+        return result
+
+    def get_string_log_list(self, log):
+        # IP
+        str_line = log.split(' - - ')
+        ip = str_line[0]
+        # Meth
+        request = re.split('" | "| ', log.split(' - - ')[1])
+        request = [r for r in request if r is not '']
+        method = request[2]
+        # URL dir
+        url = request[3]
+        url_list = url.split("/")
+        directory = url_list[1]
+        return [ip, method, directory]
+
+    def get_combined_strings(self, log):
+        strlist = self.get_string_log_list(log)
+        ip_meth = strlist[0]+strlist[1]
+        meth_url = strlist[1] + strlist[2]
+        ip_url = strlist[0] + strlist[2]
+        ip_meth_url = strlist[0] + strlist[1] + strlist[2]
+        return [ip_meth, meth_url, ip_url, ip_meth_url]
 
     """============================== GET VARIABLES ================================"""
 

@@ -24,14 +24,14 @@ def get_dangerousness_int(anomaly_value):
         return 5
 
 
-def get_dangerousness_label(anomaly_values):
-    anom_value = get_dangerousness(anomaly_values)
+def get_dangerousness_label(anomaly_values,config_file):
+    anom_value = get_dangerousness(anomaly_values, config_file)
     return "Full anomaly value: {}\nDangerousness in range [0-5]: {}".format(anom_value,
                                                                              get_dangerousness_int(anom_value))
 
 
-def get_dangerousness(anomaly_values):
-    yaml_document = open("../config/config.yml")
+def get_dangerousness(anomaly_values, config_file):
+    yaml_document = open(config_file)
     danger_values = yaml.safe_load(yaml_document)
     dang_pond_extra = danger_values["dangerous_value_extra"]
 
