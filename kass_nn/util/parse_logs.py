@@ -77,10 +77,7 @@ class LogParser:
         """
         #cur_path = os.path.dirname(__file__)
         #lines = open(os.path.relpath(filename, cur_path)).read().splitlines()
-        cur_path = os.path.abspath(os.path.dirname(__file__))
-        path = os.path.join(cur_path, filename)
-        lines = open(path).read().splitlines()
-
+        lines = open(filename).read().splitlines()
         if is_train:
             self.pre_parse_file(lines)
 
@@ -183,7 +180,6 @@ class LogParser:
                 print("Pre-Parse error in line ", line)
 
 
-
     def pre_parse_file(self, lines):
         """
                 Parse file
@@ -192,11 +188,8 @@ class LogParser:
         for line in lines:
             self.pre_parse_line(line)
         ## Parse URL
-        #self.dict_req_url_freq = {k: v for k, v in sorted(self.dict_req_url_freq.items(), key=lambda item: item[1], reverse=True)}
         self.dict_req_url_freq = self.parse_frequencies(self.dict_req_url_freq)
         self.dict_file_ext_freq = self.parse_frequencies(self.dict_file_ext_freq)
-        #self.dict_req_len_freq = self.parse_frequencies(self.dict_req_len_freq)
-
 
     def parse_frequencies(self, dict):
         dict = {k: v for k, v in sorted(dict.items(), key=lambda item: item[1], reverse=True)}
@@ -213,9 +206,7 @@ class LogParser:
         Parse file
         :param filename: name of the file
         """
-        cur_path = os.path.abspath(os.path.dirname(__file__))
-        path = os.path.join(cur_path, filename)
-        lines = open(path).read().splitlines()
+        lines = open(filename).read().splitlines()
         result = []
         for line in lines:
             line = line.strip()
