@@ -5,7 +5,6 @@ certifi==2019.11.28
 chardet==3.0.4
 cycler==0.10.0
 Cython==0.29.15
-git+https://github.com/albact7/eif.git
 freeze==1.0.10
 gast==0.2.2
 google-auth==1.10.2
@@ -44,3 +43,4 @@ termcolor==1.1.0
 urllib3==1.25.8
 Werkzeug==0.16.0
 wrapt==1.11.2
+git+https://github.com/albact7/eif.git
