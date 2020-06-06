@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from kass_nn.level_2.eif_module import eif
 from kass_nn.level_2.danger_labeling.dangerousness import get_dangerousness_int
 from kass_nn.util.parse_logs import LogParser
@@ -31,10 +33,11 @@ class MinFileExt:
         self.mesh = params["mesh_min_file_ext"]
 
 
-if __name__ == '__main__':
-    train_filename = "../level_2/train_logs/min_file_ext/train_min_file_ext.log"
-    test_filename = "../level_2/test_logs/min_file_ext/BIG_TEST_TRANS_min_file_ext.txt"
-    config_file = "../../config/config.yml"
+def main(test_file):
+    kassnn_f = Path("kass_nn")
+    train_filename = kassnn_f / "level_2/train_logs/min_file_ext/train_min_file_ext.log"
+    test_filename = kassnn_f / str("level_2/test_logs/min_file_ext/" + test_file)
+    config_file = kassnn_f / "config/config.yml"
     logpar = LogParser(train_filename)
     characteristic = MinFileExt(logpar, config_file)
 
@@ -57,4 +60,6 @@ if __name__ == '__main__':
     plt.plot_model(fig, X_train, X_test, anomaly_scores, clf,
                    characteristic.mesh, [1, 1, 1], "Min vs File Extension")
     plt.close_plot()
+
+
 

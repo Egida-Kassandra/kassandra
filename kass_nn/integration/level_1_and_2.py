@@ -19,10 +19,3 @@ def run_all_levels(train_filename, test_filename, config_file):
     should_run_level_2 = run_level_1(train_filename, test_filename, config_file, logpar)
     if should_run_level_2:
         run_level_2(train_filename, test_filename, config_file, logpar)
-
-
-if __name__ == '__main__':
-    train_filename = "../integration/train_logs/main/train_main.log"
-    test_filename = "../integration/test_logs/main/test_main_1.log"
-    config_file = "../config/config.yml"
-    run_all_levels(train_filename, test_filename, config_file)

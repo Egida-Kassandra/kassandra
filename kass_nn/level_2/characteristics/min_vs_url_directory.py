@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from kass_nn.level_2.eif_module import eif
 from kass_nn.level_2.danger_labeling.dangerousness import get_dangerousness_int
 from kass_nn.util.parse_logs import LogParser
@@ -33,11 +35,11 @@ class MinDir:
         self.mesh = params["mesh_min_dir"]
 
 
-if __name__ == '__main__':
-
-    train_filename = "../level_2/train_logs/min_dir/train_min_dir.txt"
-    test_filename = "../level_2/test_logs/min_dir/BIG_TEST_TRANS_min_directory.txt"
-    config_file = "../../config/config.yml"
+def main(test_file):
+    kassnn_f = Path("kass_nn")
+    train_filename = kassnn_f / "level_2/train_logs/min_dir/train_min_dir.log"
+    test_filename = kassnn_f / str("level_2/test_logs/min_dir/" + test_file)
+    config_file = kassnn_f / "config/config.yml"
     logpar = LogParser(train_filename)
     characteristic = MinDir(logpar, config_file)
 
@@ -51,13 +53,16 @@ if __name__ == '__main__':
     anomaly_scores = eif.predict_wo_train(X_test, clf)
     i = 0
     for anom in anomaly_scores:
-        print("TEST {}\n\tFull anomaly value: {}\n\tDangerousness in range [0-5]: {}".format(i, anom, get_dangerousness_int(anom)))
-        i+=1
+        print("TEST {}\n\tFull anomaly value: {}\n\tDangerousness in range [0-5]: {}".format(i, anom,
+                                                                                             get_dangerousness_int(
+                                                                                                 anom)))
+        i += 1
     # Plotting model
     fig = plt.open_plot()
     plt.plot_model(fig, X_train, X_test, anomaly_scores, clf,
                    characteristic.mesh, [1, 1, 1], "Min vs Dir")
     plt.close_plot()
     # Plotting with hours
-    #plt.plot_model_hours(X_train, X_test, anomaly_scores, clf, 4000)
+    # plt.plot_model_hours(X_train, X_test, anomaly_scores, clf, 4000)
+
 

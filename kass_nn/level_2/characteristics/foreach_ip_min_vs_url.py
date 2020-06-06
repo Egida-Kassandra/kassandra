@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import yaml
 from kass_nn.level_2.eif_module import eif
 from kass_nn.level_2.danger_labeling.dangerousness import get_dangerousness_int
@@ -35,12 +37,11 @@ class IPMinURL:
         """
         return log[2]
 
-
-if __name__ == '__main__':
-
-    train_filename = "../level_2/train_logs/foreach_ip_url/train_foreach_ip_url_spec.log"
-    test_filename = "../level_2/test_logs/foreach_ip_min_vs_url/BIG_TEST_TRANS_foreach_ip_min_vs_url.txt"
-    config_file = "../../config/config.yml"
+def main(test_file):
+    kassnn_f = Path("kass_nn")
+    train_filename = kassnn_f / "level_2/train_logs/foreach_ip_url/train_foreach_ip_url_spec.log"
+    test_filename = kassnn_f / str("level_2/test_logs/foreach_ip_url/" + test_file)
+    config_file = kassnn_f / "config/config.yml"
     logpar = LogParser(train_filename)
     characteristic = IPMinURL(logpar, config_file)
 
@@ -64,10 +65,12 @@ if __name__ == '__main__':
             anomaly_scores = eif.predict_wo_train([log], characteristic.clfs_by_ip[ip])
             print("TEST {}\n\tFull anomaly value: {}\n\tDangerousness in range [0-5]: {}".format(i, anomaly_scores[0],
                                                                                                  get_dangerousness_int(
-                                                                                                     anomaly_scores[0])))
+                                                                                                     anomaly_scores[
+                                                                                                         0])))
         # Plotting model
         fig = plt.open_plot()
         plt.plot_model(fig, X_train[ip], [log], anomaly_scores, characteristic.clfs_by_ip[ip],
                        characteristic.mesh, [1, 1, 1], "Min vs URL by IP")
         plt.close_plot()
         i += 1
+
