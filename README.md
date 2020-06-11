@@ -122,7 +122,7 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 Authors:
 
-* Alba Cotarelo Tuñón
+* [Alba Cotarelo Tuñón](https://www.linkedin.com/in/alba-cotarelo-tu%C3%B1%C3%B3n-0775aa165)
 * [Antonio Payá González](https://antoniopg.tk)
 * [Jose Manuel Redondo Lopez](http://orcid.org/0000-0002-0939-0186)
 
