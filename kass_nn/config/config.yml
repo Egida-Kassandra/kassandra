@@ -1,4 +1,5 @@
 ##################################### LEVEL 1 ##############################################
+################################# DANGER VALUES ############################################
 # Values [0-1]
 # Each must be in [0-1] and all must sum 1
 danger_ip: 0.25
@@ -29,7 +30,7 @@ mesh_min_dir: 2100
 mesh_min_file_ext: 2000
 mesh_min_long: 4000
 mesh_foreach_ip_url: 2000
-################################# DANGER VALUES ##########################################
+################################# DANGER VALUES ############################################
 #   Weight for each value
 # Each must be in [0-1] and all must sum 1
 value_min_meth: 0.25
