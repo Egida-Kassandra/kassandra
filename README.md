@@ -1,7 +1,7 @@
 # kassandra
 
 <!-- PROJECT SHIELDS -->
-[![EGIDA VERSION](https://img.shields.io/badge/kassandra-v0.1-blue?style=for-the-badge&color=8B12D1)](https://github.com/albact7/kassandra)
+[![KASSANDRA VERSION](https://img.shields.io/badge/kassandra-v0.1-blue?style=for-the-badge&color=8B12D1)](https://github.com/albact7/kassandra)
 [![GitHub license](https://img.shields.io/badge/license-Apache-blue?style=for-the-badge)](https://github.com/albact7/kassandra/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/badge/release-v.0.0.1-yellowgreen?style=for-the-badge)](https://github.com/albact7/kassandra/releases)
 
