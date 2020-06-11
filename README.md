@@ -30,9 +30,11 @@
 ## Table of Contents
 
 * [About the Project](#about-the-project)
+* [Prerequisites](#prerequisites)
+* [Installation](#installation)
 * [Getting Started](#getting-started)
-  * [Prerequisites](#prerequisites)
-  * [Installation](#installation)
+* [Running Tests](#running-tests)
+* [Run Dockerfile](#run-dockerfile)
 * [License](#license)
 * [Contact](#contact)
 
@@ -42,7 +44,7 @@
 Kassandra analyzes user activity and detects anomalous behaviour  in HTTP requests that could be identifies as non-malicious by other systems. Kassandra allows designing of anomaly detection policies.
 
 
-### Prerequisites
+## Prerequisites
 
 #### Prepare environment
 
@@ -52,7 +54,7 @@ Kassandra analyzes user activity and detects anomalous behaviour  in HTTP reques
 apt install -y python3 pip3 virtualenv
 ```
 
-### Installation
+## Installation
 
 #### 1. Download the source from [here](https://github.com/albact7/kassandra/releases).
  
@@ -72,13 +74,13 @@ To start running Kassandra 0.1 run the following on the root folder of the proje
 python kassandra.py
 ```
 This will run an example by default.
-## Try on my own
-### Needed files
+### Try on my own
+#### Needed files
 To test Kassandra with you own files you should change [here](https://github.com/albact7/kassandra/blob/master/kassandra.py) the path to those files.
 You will need:
 1. Train file. Log file with a huge number (40000 is OK) of HTTP requests of a server.
 2. Test file. Log file with some HTTP requests for testing.
-### Designing of anomaly detection policies
+#### Designing of anomaly detection policies
 You can also customize the anomaly values obtained by editing [config.yml](https://github.com/albact7/kassandra/blob/master/kass_nn/config/config.yml)
 * Danger values are reserved to change the weigh for each characteristc 
 * Extended Isolation Forests are reserved for adjust the Machine Learning model to the training data
@@ -94,15 +96,15 @@ Each test file can be edited to run a different set of HTTP requests, modify the
 * Level 1 tests in [here](https://github.com/albact7/kassandra/tree/master/kass_nn/level_1/test_logs/main)
 * Level 2 tests in [here](https://github.com/albact7/kassandra/tree/master/kass_nn/level_2/test_logs)
 
-### Run Dockerfile
+## Run Dockerfile
 
-#### 1. Build
+### 1. Build
 
 ```bash
 docker image build -t kassandra .
 ```
 
-#### 2. Run
+### 2. Run
 
 ```bash
 docker run -p kassandra
@@ -120,7 +122,7 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 Authors:
 
-* [Alba Cotarelo Tuñón]
+* Alba Cotarelo Tuñón
 * [Antonio Payá González](https://antoniopg.tk)
 * [Jose Manuel Redondo Lopez](http://orcid.org/0000-0002-0939-0186)
 
