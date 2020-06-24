@@ -50,9 +50,55 @@
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href=".">Home</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a>
+    <li class="toctree-l2"><a class="reference internal" href="#table-of-contents">Table of Contents</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#project-layout">Project layout</a>
+    <li class="toctree-l2"><a class="reference internal" href="#about-the-project">About the Project</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#prepare-environment">Prepare environment</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#install-python-3-and-pip">Install Python 3 and pip</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-download-the-source-from-here">1. Download the source from here.</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-create-virtualenv">2. Create virtualenv</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-install-requirements">3. Install requirements</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting started</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#try-on-my-own">Try on my own</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#needed-files">Needed files</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#designing-of-anomaly-detection-policies">Designing of anomaly detection policies</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#running-tests">Running tests</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#run-dockerfile">Run Dockerfile</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-build">1. Build</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-run">2. Run</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#license">License</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#contact">Contact</a>
     </li>
     </ul>
                     </li>
@@ -89,21 +135,114 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="welcome-to-mkdocs">Welcome to MkDocs</h1>
-<p>For full documentation visit <a href="https://www.mkdocs.org">mkdocs.org</a>.</p>
-<h2 id="commands">Commands</h2>
+                <h1 id="kassandra">kassandra</h1>
+<!-- PROJECT SHIELDS -->
+
+<p><a href="https://github.com/albact7/kassandra"><img alt="KASSANDRA VERSION" src="https://img.shields.io/badge/kassandra-v0.1-blue?style=for-the-badge&amp;color=8B12D1" /></a>
+<a href="https://github.com/albact7/kassandra/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/badge/license-Apache-blue?style=for-the-badge" /></a>
+<a href="https://github.com/albact7/kassandra/releases"><img alt="GitHub release" src="https://img.shields.io/badge/release-v.0.0.1-yellowgreen?style=for-the-badge" /></a></p>
+<!-- PROJECT LOGO -->
+
+<p><br />
+<div align="center">
+  <a href="https://github.com/albact7/kassandra">
+    <img src="img/logo.svg" alt="Logo" width="180" height="180">
+  </a></p>
+<p><p align="center">
+    <br />
+    <a href="https://albact7.github.io/kassandra/"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/albact7/kassandra">View Source</a>
+    ·
+    <a href="https://github.com/albact7/kassandra/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/albact7/kassandra/issues">Request Feature</a>
+  </p>
+</div></p>
+<!-- TABLE OF CONTENTS -->
+
+<h2 id="table-of-contents">Table of Contents</h2>
 <ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs -h</code> - Print help message and exit.</li>
+<li><a href="#about-the-project">About the Project</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#running-tests">Running Tests</a></li>
+<li><a href="#run-dockerfile">Run Dockerfile</a></li>
+<li><a href="#license">License</a></li>
+<li><a href="#contact">Contact</a></li>
 </ul>
-<h2 id="project-layout">Project layout</h2>
-<pre><code>mkdocs.yml    # The configuration file.
-docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
+<!-- ABOUT THE PROJECT -->
+
+<h2 id="about-the-project">About the Project</h2>
+<p>Kassandra analyzes user activity and detects anomalous behaviour  in HTTP requests that could be identifies as non-malicious by other systems. Kassandra allows designing of anomaly detection policies.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<h4 id="prepare-environment">Prepare environment</h4>
+<h5 id="install-python-3-and-pip">Install Python 3 and pip</h5>
+<pre><code class="bash">apt install -y python3 pip3 virtualenv
 </code></pre>
+
+<h2 id="installation">Installation</h2>
+<h4 id="1-download-the-source-from-here">1. Download the source from <a href="https://github.com/albact7/kassandra/releases">here</a>.</h4>
+<h4 id="2-create-virtualenv">2. Create virtualenv</h4>
+<pre><code class="python">virtualenv -p /usr/bin/python3 venv
+source venv/bin/activate
+</code></pre>
+
+<h4 id="3-install-requirements">3. Install requirements</h4>
+<p>Run install.bat</p>
+<!-- RUN KASSANDRA -->
+
+<h2 id="getting-started">Getting started</h2>
+<p>To start running Kassandra 0.1 run the following on the root folder of the project.</p>
+<pre><code class="bash">python kassandra.py
+</code></pre>
+
+<p>This will run an example by default.</p>
+<h3 id="try-on-my-own">Try on my own</h3>
+<h4 id="needed-files">Needed files</h4>
+<p>To test Kassandra with you own files you should change <a href="https://github.com/albact7/kassandra/blob/master/kassandra.py">here</a> the path to those files.
+You will need:
+1. Train file. Log file with a huge number (40000 is OK) of HTTP requests of a server.
+2. Test file. Log file with some HTTP requests for testing.</p>
+<h4 id="designing-of-anomaly-detection-policies">Designing of anomaly detection policies</h4>
+<p>You can also customize the anomaly values obtained by editing <a href="https://github.com/albact7/kassandra/blob/master/kass_nn/config/config.yml">config.yml</a>
+* Danger values are reserved to change the weigh for each characteristc 
+* Extended Isolation Forests are reserved for adjust the Machine Learning model to the training data</p>
+<!-- RUNNING TESTS -->
+
+<h2 id="running-tests">Running tests</h2>
+<p>To run any test run the following command, being "test_file" any of the files present on the root folder like "tst_level_*.py".</p>
+<pre><code class="bash">python filename
+</code></pre>
+
+<p>Each test file can be edited to run a different set of HTTP requests, modify the corresponding file name according to:
+* Level 1 tests in <a href="https://github.com/albact7/kassandra/tree/master/kass_nn/level_1/test_logs/main">here</a>
+* Level 2 tests in <a href="https://github.com/albact7/kassandra/tree/master/kass_nn/level_2/test_logs">here</a></p>
+<h2 id="run-dockerfile">Run Dockerfile</h2>
+<h3 id="1-build">1. Build</h3>
+<pre><code class="bash">docker image build -t kassandra .
+</code></pre>
+
+<h3 id="2-run">2. Run</h3>
+<pre><code class="bash">docker run -p kassandra
+</code></pre>
+
+<!-- LICENSE -->
+
+<h2 id="license">License</h2>
+<p>Distributed under the Apache 2.0 License. See <code>LICENSE</code> for more information.</p>
+<!-- CONTACT -->
+
+<h2 id="contact">Contact</h2>
+<p>Authors:</p>
+<ul>
+<li><a href="https://www.linkedin.com/in/alba-cotarelo-tu%C3%B1%C3%B3n-0775aa165">Alba Cotarelo Tuñón</a></li>
+<li><a href="https://antoniopg.tk">Antonio Payá González</a></li>
+<li><a href="http://orcid.org/0000-0002-0939-0186">Jose Manuel Redondo Lopez</a></li>
+</ul>
+<p>Project Link: <a href="https://github.com/albact7/kassandra">https://github.com/albact7/kassandra</a></p>
               
             </div>
           </div>
@@ -148,5 +287,5 @@ docs/
 
 <!--
 MkDocs version : 1.1.2
-Build Date UTC : 2020-06-24 08:44:53.287216+00:00
+Build Date UTC : 2020-06-24 08:48:45.653693+00:00
 -->
