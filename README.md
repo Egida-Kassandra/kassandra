@@ -41,7 +41,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About the Project
 
-Kassandra analyzes user activity and detects anomalous behaviour  in HTTP requests that could be identifies as non-malicious by other systems. Kassandra allows designing of anomaly detection policies. Kassandra is part of the project Egida and Kassandra, Egida can be checked <a href="https://github.com/antonioalfa22/egida">here</a>.
+Kassandra analyzes user activity and detects anomalous behaviour  in HTTP requests that could be identified as non-malicious by other systems. Kassandra allows designing of anomaly detection policies. Kassandra is part of the project Egida and Kassandra, Egida can be checked <a href="https://github.com/antonioalfa22/egida">here</a>.
 
 
 ## Prerequisites
@@ -122,7 +122,7 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 Authors:
 
-* [Alba Cotarelo Tuñón](https://www.linkedin.com/in/alba-cotarelo-tu%C3%B1%C3%B3n-0775aa165)
+* [Alba Cotarelo Tuñón](https://www.albact.ml/)
 * [Antonio Payá González](https://antoniopg.tk)
 * [Jose Manuel Redondo Lopez](http://orcid.org/0000-0002-0939-0186)
 
