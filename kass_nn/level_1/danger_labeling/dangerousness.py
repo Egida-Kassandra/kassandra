@@ -1,4 +1,5 @@
 import yaml
+import time
 
 
 def is_characteristic(charac, logpar_dict):
@@ -6,33 +7,41 @@ def is_characteristic(charac, logpar_dict):
 
 
 def is_in_training_single(test, prev_logpar):
+    print("Sublevel Single")
+    st = time.time()
     is_ip = is_characteristic(test[0], prev_logpar.dict_ip)
     is_meth = is_characteristic(test[1], prev_logpar.dict_req_meth)
     is_url = is_characteristic(test[2], prev_logpar.dict_req_url)
     presence_list = [is_ip, is_meth, is_url]
+    end = time.time()
+    print("\tTime: ",end-st)
     get_results_single(presence_list)
     return presence_list
 
 
 def get_results_single(presence_list):
-    print("Sublevel Single")
+    
     print("\tIP is in training: {}".format(presence_list[0]))
     print("\tMethod is in training: {}".format(presence_list[1]))
     print("\tURL is in training: {}".format(presence_list[2]))
 
 
 def is_in_training_combined(test, prev_logpar):
+    print("Sublevel Combined")
+    st = time.time()
     ip_meth = is_characteristic(test[0] + test[1], prev_logpar.comb_list_ip_meth)
     meth_url = is_characteristic(test[1] + test[2], prev_logpar.comb_list_meth_url)
     ip_url = is_characteristic(test[0] + test[2], prev_logpar.comb_list_ip_url)
     ip_meth_url = is_characteristic(test[0] + test[1] + test[2], prev_logpar.comb_list_ip_meth_url)
     presence_list = [ip_meth, meth_url, ip_url, ip_meth_url]
+    end = time.time()
+    print("\tTime: ",end-st)
     get_results_combined(presence_list)
     return presence_list
 
 
 def get_results_combined(presence_list):
-    print("Sublevel Combined")
+    
     print("\tIP and Method are in training: {}".format(presence_list[0]))
     print("\tMethod and URL are in training: {}".format(presence_list[1]))
     print("\tIP and URL are in training: {}".format(presence_list[2]))

@@ -1,0 +1,4 @@
+site_name: Kassandra Docs
+nav:
+    - Home: index.md
+theme: readthedocs

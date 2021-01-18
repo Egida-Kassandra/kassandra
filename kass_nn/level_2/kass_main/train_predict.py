@@ -6,6 +6,8 @@ import kass_nn.level_2.characteristics.characteristic as charac
 from kass_nn.util import kass_plotter as plt
 import kass_nn.level_2.danger_labeling.dangerousness as dang
 
+import time
+
 
 class TrainPredict:
 
@@ -38,10 +40,17 @@ class TrainPredict:
 
     def predict_all(self, test_filename):
         print("\tPREDICTING")
+        st = time.time()
         min_meth_pred = charac.get_prediction(test_filename, self.min_meth, self.min_meth.clf)[0]
         min_dir_pred = charac.get_prediction(test_filename, self.min_dir, self.min_dir.clf)[0]
         min_file_ext_pred = charac.get_prediction(test_filename, self.min_file_ext, self.min_file_ext.clf)[0]
         min_long_pred = charac.get_prediction(test_filename, self.min_long, self.min_long.clf)[0]
+
+        anomaly_scores = [min_meth_pred, min_dir_pred, min_file_ext_pred, min_long_pred]
+        calculated_dang = dang.get_dangerousness_label(anomaly_scores,self.config_file)
+
+        end = time.time()
+        print("Time: ", end-st)
 
         print("=" * 80)
         print("RESULTS")
@@ -50,9 +59,8 @@ class TrainPredict:
         print("\tMin vs FileExt: {}".format(min_file_ext_pred))
         print("\tMin vs Long: {}".format(min_long_pred))
 
-        anomaly_scores = [min_meth_pred, min_dir_pred, min_file_ext_pred, min_long_pred]
         print("=" * 80)
-        print(dang.get_dangerousness_label(anomaly_scores,self.config_file))
+        print(calculated_dang)
 
         self.plot_dangerousness(min_meth_pred, min_dir_pred, min_file_ext_pred, min_long_pred)
 
