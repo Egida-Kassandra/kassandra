@@ -1,6 +1,8 @@
 from kass_nn.level_2.eif_module import eif
 from kass_nn.util import load_parsed_logs as lp
 
+import time
+
 
 def get_eif(charac):
     # Loading training data
@@ -9,7 +11,10 @@ def get_eif(charac):
     charac.X_train = X_train
     # Training model
     print("\tTRAINING")
-    clf = eif.train_model(X_train, charac)
+    st = time.time()
+    clf = eif.train_model(X_train, charac, charac.n_threads)
+    end = time.time()
+    print("\tTime: ",end-st)
     # Return model
     return clf
 

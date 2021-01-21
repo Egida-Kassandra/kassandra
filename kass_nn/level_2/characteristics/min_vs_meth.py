@@ -23,6 +23,7 @@ class MinMeth:
         self.X_train = []
         self.X_test = []
         self.clf = None
+        self.n_threads = 1
         self.read_params(config_file)
 
     def read_params(self, config_file):
@@ -31,6 +32,7 @@ class MinMeth:
         self.ntrees = params["ntrees_min_meth"]
         self.sample_size = params["sample_size_min_meth"]
         self.mesh = params["mesh_min_meth"]
+        self.n_threads = params["n_threads"]
 
 
 def main(test_file):
@@ -45,9 +47,9 @@ def main(test_file):
     # Loading testing data
     X_test = lp.load_parsed_data(test_filename, False, characteristic)
     # Training model
-    clf = eif.train_model(X_train, characteristic)
+    clf = eif.train_model(X_train, characteristic, characteristic.n_threads)
     # Predicting model
-    anomaly_scores = eif.predict_wo_train(X_test, clf)
+    anomaly_scores = eif.predict_wo_train(X_test, clf, characteristic.n_threads)
     i = 0
     for anom in anomaly_scores:
         print("TEST {}\n\tFull anomaly value: {}\n\tDangerousness in range [0-5]: {}".format(i, anom,
@@ -57,7 +59,7 @@ def main(test_file):
     # Plotting model
     fig = plt.open_plot()
     plt.plot_model(fig, X_train, X_test, anomaly_scores, clf,
-                   characteristic.mesh, [1, 1, 1], "Min vs Meth", n_threads)
+                   characteristic.mesh, [1, 1, 1], "Min vs Meth", characteristic.n_threads)
     plt.close_plot()
 
 

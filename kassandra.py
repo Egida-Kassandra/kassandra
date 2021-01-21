@@ -7,4 +7,4 @@ if __name__ == '__main__':
     test_filename = integration_f/"test_logs/main/test_main_0.log"
     config_f = Path("kass_nn/config")
     config_file = config_f/"config.yml"
-    run_all_levels(train_filename, test_filename, config_file, 10)
+    run_all_levels(train_filename, test_filename, config_file)

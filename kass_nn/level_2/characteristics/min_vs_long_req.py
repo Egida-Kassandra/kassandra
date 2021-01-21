@@ -23,6 +23,7 @@ class MinLong:
         self.X_train = []
         self.X_test = []
         self.clf = None
+        self.n_threads = 1
         self.read_params(config_file)
 
     def read_params(self, config_file):
@@ -31,6 +32,7 @@ class MinLong:
         self.ntrees = params["ntrees_min_long"]
         self.sample_size = params["sample_size_min_long"]
         self.mesh = params["mesh_min_long"]
+        self.n_threads = params["n_threads"]
 
 
 def main(test_file):
@@ -49,7 +51,7 @@ def main(test_file):
     clf = eif.train_model(X_train, characteristic)
     # Predicting model
     n_threads = 10
-    anomaly_scores = eif.predict_wo_train(X_test, clf, n_threads)
+    anomaly_scores = eif.predict_wo_train(X_test, clf, characteristic.n_threads)
     i = 0
     for anom in anomaly_scores:
         print("TEST {}\n\tFull anomaly value: {}\n\tDangerousness in range [0-5]: {}".format(i, anom,
@@ -59,6 +61,6 @@ def main(test_file):
     # Plotting model
     fig = plt.open_plot()
     plt.plot_model(fig, X_train, X_test, anomaly_scores, clf,
-                   characteristic.mesh, [1, 1, 1], "Min vs Request length", n_threads)
+                   characteristic.mesh, [1, 1, 1], "Min vs Request length", characteristic.n_threads)
     plt.close_plot()
 

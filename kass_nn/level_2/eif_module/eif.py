@@ -4,13 +4,13 @@ import pandas as pd
 from kass_nn.util import load_parsed_logs as lp
 
 
-def train_model(X_train, characteristic):
+def train_model(X_train, characteristic, n_threads):
     X_train = pd.DataFrame(X_train)
     X_train = lp.load_data_float(X_train)
     # Train block
     train_len = len(X_train)
     if train_len > 1000:
-        clf = iso.iForest(X_train, ntrees=characteristic.ntrees, sample_size=characteristic.sample_size, ExtensionLevel=1)
+        clf = iso.iForest(X_train, ntrees=characteristic.ntrees, sample_size=characteristic.sample_size, ExtensionLevel=1, n_threads=n_threads)
     else:
         clf = iso.iForest(X_train, ntrees=5000, sample_size=train_len, ExtensionLevel=1)
     return clf

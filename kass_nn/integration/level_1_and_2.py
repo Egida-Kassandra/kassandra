@@ -8,14 +8,14 @@ def run_level_1(train_filename, test_filename, config_file, logpar):
     return level1.run_level_1(train_filename, test_filename, config_file, logpar)
 
 
-def run_level_2(train_filename, test_filename, config_file, logpar, n_threads):
+def run_level_2(train_filename, test_filename, config_file, logpar):
     print("*" * 40 + " LEVEL 2 " + "*" * 40)
-    return level2.run_level_2(train_filename, test_filename, config_file, logpar, n_threads)
+    return level2.run_level_2(train_filename, test_filename, config_file, logpar)
 
 
-def run_all_levels(train_filename, test_filename, config_file, n_threads):
+def run_all_levels(train_filename, test_filename, config_file):
     print("*" * 40 + " PARSING TRAINING DATA " + "*" * 40)
     logpar = LogParser(train_filename)
     should_run_level_2 = run_level_1(train_filename, test_filename, config_file, logpar)
     if should_run_level_2:
-        run_level_2(train_filename, test_filename, config_file, logpar, n_threads)
+        run_level_2(train_filename, test_filename, config_file, logpar)

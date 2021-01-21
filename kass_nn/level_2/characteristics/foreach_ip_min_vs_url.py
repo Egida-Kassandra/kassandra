@@ -22,6 +22,7 @@ class IPMinURL:
         self.X_train = []
         self.X_test = []
         self.clfs_by_ip = {}
+        self.n_threads = 1
         self.read_params(config_file)
 
     def read_params(self, config_file):
@@ -30,6 +31,8 @@ class IPMinURL:
         self.ntrees = params["ntrees_min_long"]
         self.sample_size = params["sample_size_min_long"]
         self.mesh = params["mesh_min_long"]
+        self.n_threads = params["n_threads"]
+
 
     def get_group_criteria(self, log):
         """
@@ -59,11 +62,10 @@ def main(test_file):
         clf = eif.train_model(X_train)
     # Predicting model
     i = 0
-    n_threads = 10
     for log in X_test:
         ip = characteristic.get_group_criteria(log)
         if ip in X_train:
-            anomaly_scores = eif.predict_wo_train([log], characteristic.clfs_by_ip[ip], n_threads)
+            anomaly_scores = eif.predict_wo_train([log], characteristic.clfs_by_ip[ip], characteristic.n_threads)
             print("TEST {}\n\tFull anomaly value: {}\n\tDangerousness in range [0-5]: {}".format(i, anomaly_scores[0],
                                                                                                  get_dangerousness_int(
                                                                                                      anomaly_scores[
@@ -71,7 +73,7 @@ def main(test_file):
         # Plotting model
         fig = plt.open_plot()
         plt.plot_model(fig, X_train[ip], [log], anomaly_scores, characteristic.clfs_by_ip[ip],
-                       characteristic.mesh, [1, 1, 1], "Min vs URL by IP", n_threads)
+                       characteristic.mesh, [1, 1, 1], "Min vs URL by IP", characteristic.n_threads)
         plt.close_plot()
         i += 1
 

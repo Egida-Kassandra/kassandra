@@ -65,7 +65,7 @@ def close_plot():
     plt.savefig("dangerousness_svg.png", dpi=100)
     plt.show()
 
-def plot_data_hours(data_train, data_test, col_X, colY, anomaly_scores, clf, mesh, extra_points, n_threads=10):
+def plot_data_hours(data_train, data_test, col_X, colY, anomaly_scores, clf, mesh, extra_points, n_threads):
     """
     Plots 2D data set training and testing
     :param data_train: pandas data frame train
