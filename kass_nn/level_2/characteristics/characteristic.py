@@ -14,12 +14,12 @@ def get_eif(charac):
     return clf
 
 
-def get_prediction(test_filename, charac, clf):
+def get_prediction(test_filename, charac, clf, n_threads):
     # Loading testing data
     X_test = lp.load_parsed_data(test_filename, False, charac)
     charac.X_test = X_test
     # Predicting model
-    anomaly_scores = eif.predict_wo_train(X_test, clf)
+    anomaly_scores = eif.predict_wo_train(X_test, clf, n_threads)
     return anomaly_scores
 
 

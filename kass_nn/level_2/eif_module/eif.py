@@ -15,10 +15,10 @@ def train_model(X_train, characteristic):
         clf = iso.iForest(X_train, ntrees=5000, sample_size=train_len, ExtensionLevel=1)
     return clf
 
-def predict_w_train(X_test, clf, X_train):
+def predict_w_train(X_test, clf, X_train, n_threads):
     X_test = np.array(X_test).astype(np.float)
     # Predict block
-    anomaly_scores = clf.compute_paths(X_test)
+    anomaly_scores = clf.compute_paths(X_test, n_threads)
     anomaly_scores_sorted = np.argsort(anomaly_scores)
     indices_with_preds = anomaly_scores_sorted[-int(np.ceil(0.9 * X_train.shape[0])):]
     print(indices_with_preds)
@@ -26,19 +26,19 @@ def predict_w_train(X_test, clf, X_train):
     return anomaly_scores
 
 
-def predict_wo_train(X_test, clf):
+def predict_wo_train(X_test, clf, n_threads):
     # Predict block
     X_test = np.array(X_test).astype(np.float)
     anomaly_scores = [None]
     try:
-        anomaly_scores = clf.compute_paths(X_test)
+        anomaly_scores = clf.compute_paths(X_test, n_threads)
     finally:
         return anomaly_scores
 
 
-def predict_plot_hours(X_test, clf, X_train):
+def predict_plot_hours(X_test, clf, X_train, n_threads):
     # Predict block
-    anomaly_scores = clf.compute_paths(X_test)
+    anomaly_scores = clf.compute_paths(X_test, n_threads)
     anomaly_scores_sorted = np.argsort(anomaly_scores)
     indices_with_preds = anomaly_scores_sorted[-int(np.ceil(0.9 * X_train.shape[0])):]
     return anomaly_scores

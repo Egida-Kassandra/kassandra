@@ -5,20 +5,20 @@ import numpy as np
 import pandas as pd
 
 
-def plot_model(fig, X_train, X_test, anomaly_scores, clf, mesh, subplot_value, chart_name):
+def plot_model(fig, X_train, X_test, anomaly_scores, clf, mesh, subplot_value, chart_name, n_threads):
     # Plot block
 
     data_pandas = pd.DataFrame(X_train)
     datatest_pandas = pd.DataFrame(X_test)
-    plot_data(fig, data_pandas, datatest_pandas, 0, 1, anomaly_scores, clf, mesh, subplot_value, chart_name)
+    plot_data(fig, data_pandas, datatest_pandas, 0, 1, anomaly_scores, clf, mesh, subplot_value, chart_name, n_threads)
 
 
-def plot_model_hours(X_train, X_test, anomaly_scores, clf, mesh):
+def plot_model_hours(X_train, X_test, anomaly_scores, clf, mesh, n_threads):
     # Plot block
     data_pandas = pd.DataFrame(X_train)
     datatest_pandas = pd.DataFrame(X_test)
     extra_points = get_hour_points()
-    plot_data_hours(data_pandas, datatest_pandas, 0, 1, anomaly_scores, clf, mesh, extra_points)
+    plot_data_hours(data_pandas, datatest_pandas, 0, 1, anomaly_scores, clf, mesh, extra_points, n_threads)
 
 
 def open_plot():
@@ -27,7 +27,7 @@ def open_plot():
     return f
 
 
-def plot_data(fig, data_train, data_test, col_X, colY, anomaly_scores, clf, mesh, subplot_value, chart_name):
+def plot_data(fig, data_train, data_test, col_X, colY, anomaly_scores, clf, mesh, subplot_value, chart_name, n_threads):
     """
     Plots 2D data set training and testing
     :param data_train: pandas data frame train
@@ -39,7 +39,7 @@ def plot_data(fig, data_train, data_test, col_X, colY, anomaly_scores, clf, mesh
     """
 
     xx, yy = np.meshgrid(np.linspace(-mesh, mesh, 50), np.linspace(-mesh, mesh, 50))
-    S0 = clf.compute_paths(np.c_[xx.ravel(), yy.ravel()])
+    S0 = clf.compute_paths(np.c_[xx.ravel(), yy.ravel()], n_threads)
     S0 = S0.reshape(xx.shape)
     ss0 = np.argsort(anomaly_scores)
 
@@ -62,9 +62,10 @@ def plot_data(fig, data_train, data_test, col_X, colY, anomaly_scores, clf, mesh
 
 
 def close_plot():
+    plt.savefig("dangerousness_svg.png", dpi=100)
     plt.show()
 
-def plot_data_hours(data_train, data_test, col_X, colY, anomaly_scores, clf, mesh, extra_points):
+def plot_data_hours(data_train, data_test, col_X, colY, anomaly_scores, clf, mesh, extra_points, n_threads=10):
     """
     Plots 2D data set training and testing
     :param data_train: pandas data frame train
@@ -76,7 +77,7 @@ def plot_data_hours(data_train, data_test, col_X, colY, anomaly_scores, clf, mes
     """
 
     xx, yy = np.meshgrid(np.linspace(-mesh, mesh, 50), np.linspace(-mesh, mesh, 50))
-    S0 = clf.compute_paths(np.c_[xx.ravel(), yy.ravel()])
+    S0 = clf.compute_paths(np.c_[xx.ravel(), yy.ravel()], n_treads)
     S0 = S0.reshape(xx.shape)
     ss0 = np.argsort(anomaly_scores)
     f = plt.figure(figsize=(15, 6))

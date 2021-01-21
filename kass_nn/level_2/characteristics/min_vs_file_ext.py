@@ -48,7 +48,8 @@ def main(test_file):
     # Training model
     clf = eif.train_model(X_train, characteristic)
     # Predicting model
-    anomaly_scores = eif.predict_wo_train(X_test, clf)
+    n_threads = 10
+    anomaly_scores = eif.predict_wo_train(X_test, clf, n_threads)
     i = 0
     for anom in anomaly_scores:
         print("TEST {}\n\tFull anomaly value: {}\n\tDangerousness in range [0-5]: {}".format(i, anom,
@@ -58,7 +59,7 @@ def main(test_file):
     # Plotting model
     fig = plt.open_plot()
     plt.plot_model(fig, X_train, X_test, anomaly_scores, clf,
-                   characteristic.mesh, [1, 1, 1], "Min vs File Extension")
+                   characteristic.mesh, [1, 1, 1], "Min vs File Extension", n_threads)
     plt.close_plot()
 
 

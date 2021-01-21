@@ -3,10 +3,10 @@ from kass_nn.level_2.kass_main.train_predict import TrainPredict
 import sys
 from kass_nn.util.parse_logs import LogParser
 
-def run_level_2(train_filename, test_filename, config_file, logpar):
+def run_level_2(train_filename, test_filename, config_file, logpar, n_threads):
     trainpredict = TrainPredict(train_filename, config_file, logpar)
     trainpredict.train_all()
-    trainpredict.predict_all(test_filename)
+    trainpredict.predict_all(test_filename, n_threads)
 
 
 def main(test_file):
@@ -15,8 +15,9 @@ def main(test_file):
     test_filename = kassnn_f / str("level_2/test_logs/main/" + test_file)
     config_file = kassnn_f / "config/config.yml"
     logpar = LogParser(train_filename)
-    trainpredict = TrainPredict(train_filename, config_file, logpar)
+    trainpredict = TrainPredict(train_filename, config_file, logpar, n_threads)
     trainpredict.train_all()
-    trainpredict.predict_all(test_filename)
+    n_threads = 1
+    trainpredict.predict_all(test_filename, n_threads)
 
 

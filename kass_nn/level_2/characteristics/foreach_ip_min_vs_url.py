@@ -59,10 +59,11 @@ def main(test_file):
         clf = eif.train_model(X_train)
     # Predicting model
     i = 0
+    n_threads = 10
     for log in X_test:
         ip = characteristic.get_group_criteria(log)
         if ip in X_train:
-            anomaly_scores = eif.predict_wo_train([log], characteristic.clfs_by_ip[ip])
+            anomaly_scores = eif.predict_wo_train([log], characteristic.clfs_by_ip[ip], n_threads)
             print("TEST {}\n\tFull anomaly value: {}\n\tDangerousness in range [0-5]: {}".format(i, anomaly_scores[0],
                                                                                                  get_dangerousness_int(
                                                                                                      anomaly_scores[
@@ -70,7 +71,7 @@ def main(test_file):
         # Plotting model
         fig = plt.open_plot()
         plt.plot_model(fig, X_train[ip], [log], anomaly_scores, characteristic.clfs_by_ip[ip],
-                       characteristic.mesh, [1, 1, 1], "Min vs URL by IP")
+                       characteristic.mesh, [1, 1, 1], "Min vs URL by IP", n_threads)
         plt.close_plot()
         i += 1
 

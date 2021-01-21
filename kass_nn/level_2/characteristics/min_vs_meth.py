@@ -57,7 +57,7 @@ def main(test_file):
     # Plotting model
     fig = plt.open_plot()
     plt.plot_model(fig, X_train, X_test, anomaly_scores, clf,
-                   characteristic.mesh, [1, 1, 1], "Min vs Meth")
+                   characteristic.mesh, [1, 1, 1], "Min vs Meth", n_threads)
     plt.close_plot()
 
 
