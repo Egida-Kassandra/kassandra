@@ -19,7 +19,10 @@ def load_data_pandas(filename, is_train, logpar, columns):
     """
     if is_train:
         return pd.DataFrame(logpar.parsed_train_data)[columns]
-    data_train = logpar.parse_file(filename, is_train)
+    # if test input is a file
+    #data_train = logpar.parse_file(filename, is_train) 
+    # if test input by console
+    data_train = logpar.public_parse_line(filename, is_train)
     return pd.DataFrame(data_train)[columns]
 
 
