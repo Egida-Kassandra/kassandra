@@ -15,7 +15,7 @@ while True:
     train_filename = integration_f/"train_logs/main/train_main.log"
     data, address = sock.recvfrom(4096)
 
-    http_req = str(data).split('nginx: ')[1][:-1])
+    http_req = str(data).split('nginx: ')[1][:-1]
     config_f = Path("kass_nn/config")
     config_file = config_f/"config.yml"
     run_all_levels(train_filename, http_req, config_file)
