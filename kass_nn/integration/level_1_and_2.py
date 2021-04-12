@@ -13,9 +13,21 @@ def run_level_2(train_filename, test_filename, config_file, logpar):
     return level2.run_level_2(train_filename, test_filename, config_file, logpar)
 
 
-def run_all_levels(train_filename, test_filename, config_file):
+def preparing(train_filename):
     print("*" * 40 + " PARSING TRAINING DATA " + "*" * 40)
     logpar = LogParser(train_filename)
+    return logpar
+
+
+def run_all_levels(train_filename, test_filename, config_file):
+    
+    should_run_level_2 = run_level_1(train_filename, test_filename, config_file, logpar)
+    if should_run_level_2:
+        run_level_2(train_filename, test_filename, config_file, logpar)
+
+
+def run_all_levels(train_filename, test_filename, config_file, logpar):
+    
     should_run_level_2 = run_level_1(train_filename, test_filename, config_file, logpar)
     if should_run_level_2:
         run_level_2(train_filename, test_filename, config_file, logpar)

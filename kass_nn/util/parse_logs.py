@@ -144,6 +144,13 @@ class LogParser:
         return single_data
 
 
+    def public_parse_line(self, line, is_train):
+        www = self.weights_test
+        if is_train:
+            www = self.weights_train
+        return [self.parse_line(line, www, is_train, None)]
+
+
     def generate_synt_data(self, file, url, line):
         if (url < 50):
             file.write(line + "\n")

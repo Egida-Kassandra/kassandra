@@ -4,8 +4,13 @@ from pathlib import Path
 
 
 def run_level_1(train_filename, test_filename, config_file, logpar):
-    X_test = logpar.get_string_variables(test_filename)
-    test = X_test[0]
+    # if test input is a file
+    #X_test = logpar.get_string_variables(test_filename)
+    #test = X_test[0]
+    # if test input by console
+    X_test = logpar.get_string_log_list(test_filename)
+    test = X_test
+
     presence_list_single = dangerousness.is_in_training_single(test, logpar)
     presence_list_combined = dangerousness.is_in_training_combined(test, logpar)
     print("="*80)
