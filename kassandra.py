@@ -3,6 +3,9 @@ import sys
 from kass_nn.integration.level_1_and_2 import run_all_levels
 from pathlib import Path
 
+integration_f = Path("kass_nn/integration")
+train_filename = integration_f/"train_logs/main/train_main.log"
+
 # Create a UDP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -13,8 +16,7 @@ sock.bind(server_address)
 
 while True:
     print('\nwaiting to receive message')
-    integration_f = Path("kass_nn/integration")
-    train_filename = integration_f/"train_logs/main/train_main.log"
+   
     data, address = sock.recvfrom(4096)
 
     http_req = str(data).split('nginx: ')[1][:-1]
