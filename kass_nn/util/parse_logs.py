@@ -235,7 +235,11 @@ class LogParser:
         # URL dir
         url = request[3]
         url_list = url.split("/")
-        directory = url_list[1]
+        directory = ''
+        if len(url_list) < 3:
+            directory = url_list[0]
+        else:
+            directory = url_list[1]
         return [ip, method, directory]
 
     def get_combined_strings(self, log):
@@ -305,7 +309,11 @@ class LogParser:
         """
         url = request[3]
         url_list = url.split("/")
-        directory = url_list[1]
+        directory = ''
+        if len(url_list) < 3:
+            directory = url_list[0]
+        else:
+            directory = url_list[1]
         self.parse_str_to_dict_pre_parse(self.dict_req_url_freq, directory)
         return self.dict_req_url_freq[directory]
 
@@ -317,7 +325,11 @@ class LogParser:
         """
         url = request[3]
         url_list = url.split("/")
-        directory = url_list[1]
+        directory = ''
+        if len(url_list) < 3:
+            directory = url_list[0]
+        else:
+            directory = url_list[1]
         self.parse_str_to_dict_freq(self.dict_req_url, self.dict_req_url_freq, directory, weight)
         return self.dict_req_url[directory]
 

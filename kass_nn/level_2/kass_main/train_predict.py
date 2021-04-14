@@ -43,7 +43,8 @@ class TrainPredict:
         self.min_long.clf = charac.get_eif(self.min_long)
 
     def predict_all(self, test_filename):
-        print("\tPREDICTING")
+        print("=" * 80)
+        print("PREDICTING")
         st = time.time()
         min_meth_pred = charac.get_prediction(test_filename, self.min_meth, self.min_meth.clf, self.n_threads)[0]
         min_dir_pred = charac.get_prediction(test_filename, self.min_dir, self.min_dir.clf, self.n_threads)[0]
@@ -56,7 +57,6 @@ class TrainPredict:
         end = time.time()
         print("Time: ", end-st)
 
-        print("=" * 80)
         print("RESULTS")
         print("\tMin vs Meth: {}".format(min_meth_pred))
         print("\tMin vs Dir: {}".format(min_dir_pred))
