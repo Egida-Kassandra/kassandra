@@ -15,7 +15,7 @@
 
   <p align="center">
     <br />
-    <a href="https://albact7.github.io/kassandra/"><strong>Explore the docs »</strong></a>
+    <a href="https://egida-kassandra.github.io/kassandra/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/albact7/kassandra">View Source</a>
