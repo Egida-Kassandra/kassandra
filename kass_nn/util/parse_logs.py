@@ -15,6 +15,7 @@ class LogParser:
         """Constructor"""
         self.dict_ip = {}
         self.dict_req_meth = {}
+        self.dict_req_meth_freq = {}
         self.dict_req_url = {}
         self.dict_ref_url = {}
         self.dict_user_agent = {}
@@ -169,7 +170,7 @@ class LogParser:
                 # Request #
                 request = self.get_request(line)
                 # Method #
-
+                self.get_method_pre_parse(request)
                 # URL #
                 self.get_url_pre_parse(request)
                 # Status code #
@@ -195,6 +196,7 @@ class LogParser:
         for line in lines:
             self.pre_parse_line(line)
         ## Parse URL
+        self.dict_req_meth_freq = self.parse_frequencies(self.dict_req_meth_freq)
         self.dict_req_url_freq = self.parse_frequencies(self.dict_req_url_freq)
         self.dict_file_ext_freq = self.parse_frequencies(self.dict_file_ext_freq)
 
@@ -282,8 +284,19 @@ class LogParser:
         """
         method = request[2]
         url = request[3]
-        self.parse_str_to_dict(self.dict_req_meth, method, weight)
+        self.parse_str_to_dict_freq(self.dict_req_meth, self.dict_req_meth_freq, method, weight)
         return self.dict_req_meth[method]
+
+    def get_method_pre_parse(self, request):
+        """
+        Returns meth of log
+        @param request: line to parse
+        """
+        method = request[2]
+        url = request[3]
+        self.parse_str_to_dict_pre_parse(self.dict_req_meth_freq, method)
+        return self.dict_req_meth_freq[method]
+
 
     def get_url_pre_parse(self, request):
         """

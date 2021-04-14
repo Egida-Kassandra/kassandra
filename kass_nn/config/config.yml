@@ -16,22 +16,22 @@ danger_ip_meth_url: 0.0625
 ##################################### LEVEL 2 ##############################################
 ############################ EXTENDED ISOLATION FORESTS ####################################
 #   Number of generated trees
-ntrees_min_meth: 2000
-ntrees_min_dir: 2000
-ntrees_min_file_ext: 1000
-ntrees_min_long: 1000
+ntrees_min_meth: 1000 #2000
+ntrees_min_dir: 1000 #1000
+ntrees_min_file_ext: 1000 #1000
+ntrees_min_long: 1000 #1000
 ntrees_foreach_ip_url: 1000
 #   Size of subset of data to generate a tree
 sample_size_min_meth: 1000
-sample_size_min_dir: 10000
+sample_size_min_dir: 1000 #10000
 sample_size_min_file_ext: 1000
 sample_size_min_long: 1000
 sample_size_foreach_ip_url: 1100
 #   Mesh for plotting
-mesh_min_meth: 1500
-mesh_min_dir: 2100
-mesh_min_file_ext: 2000
-mesh_min_long: 4000
+mesh_min_meth: 1400 #1500
+mesh_min_dir: 5200 #2100
+mesh_min_file_ext: 1900
+mesh_min_long: 2900 #4000
 mesh_foreach_ip_url: 2000
 ################################# DANGER VALUES ############################################
 #   Weight for each value
