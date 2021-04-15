@@ -31,7 +31,7 @@ sample_size_foreach_ip_url: 1100
 mesh_min_meth: 1400 #1500
 mesh_min_dir: 2100 #2100
 mesh_min_file_ext: 1900
-mesh_min_long: 2800 #4000
+mesh_min_long: 2100 #4000
 mesh_foreach_ip_url: 2000
 ################################# DANGER VALUES ############################################
 #   Weight for each value

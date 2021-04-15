@@ -181,7 +181,7 @@ class LogParser:
                 self.get_file_ext_pre_parse(request)
 
                 # Request length
-                #self.get_req_len_preparse(request)
+                self.get_req_len_preparse(request)
 
             except Exception as e:
                 print(e)
@@ -199,6 +199,7 @@ class LogParser:
         self.dict_req_meth_freq = self.parse_frequencies(self.dict_req_meth_freq)
         self.dict_req_url_freq = self.parse_frequencies(self.dict_req_url_freq)
         self.dict_file_ext_freq = self.parse_frequencies(self.dict_file_ext_freq)
+        self.dict_req_len_freq = self.parse_frequencies(self.dict_req_len_freq)
 
     def parse_frequencies(self, dict):
         dict = {k: v for k, v in sorted(dict.items(), key=lambda item: item[1], reverse=True)}
@@ -415,8 +416,9 @@ class LogParser:
         """
         url = request[3]
         length = len(url)
-        self.parse_str_to_dict_pre_parse(self.dict_req_len_freq, length)
-        return self.dict_req_len_freq[length]
+        str_len = str(length)
+        self.parse_str_to_dict_pre_parse(self.dict_req_len_freq, str_len)
+        return self.dict_req_len_freq[str_len]
 
     def get_req_len(self, request):
         """
@@ -431,13 +433,15 @@ class LogParser:
         url = request[3]
         length = len(url)
         str_len = str(length)
-        #self.parse_str_to_dict(self.dict_req_len, length, 1)
+        self.parse_str_to_dict_freq(self.dict_req_len, self.dict_req_len_freq, str_len, 0)
+        """
         try:
             if str_len not in self.dict_req_len:
                 self.dict_req_len[str_len] = length
         except Exception as e:
             print(e)
             return self.dict_req_len
+        """
         return self.dict_req_len[str_len]
 
 
