@@ -38,6 +38,7 @@ def get_dangerousness(anomaly_values, config_file):
     none_values_rest = 0
     none_values_num = 0
     i = 0
+    # Share value ponderation between the rest of characteristics if one is None
     for val in anomaly_values:
         if val is None:
             none_values_rest += danger_values[dict_ponds[i]]

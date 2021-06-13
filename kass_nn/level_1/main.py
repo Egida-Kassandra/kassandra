@@ -16,7 +16,7 @@ def run_level_1(train_filename, test_filename, config_file, logpar):
     print("="*80)
     print("Dangerousness in range [0-100]: {}".format(
         dangerousness.get_danger_value(presence_list_single, presence_list_combined, config_file)))
-    return False not in presence_list_single
+    return False not in presence_list_single and False not in presence_list_combined
 
 
 def main(test_file):

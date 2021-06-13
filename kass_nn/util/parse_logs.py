@@ -39,8 +39,8 @@ class LogParser:
         self.comb_list_ip_url = []
         self.comb_list_ip_meth_url = []
 
-        self.weights_train = [1,1,20,500,1,1,1]
-        self.weights_test = [1,1,20,500,1,1,1]
+        self.weights_train = [1,1,1,1,1,1,1]
+        self.weights_test = [1,1,1,1,1,1,1]
 
         self.parsed_train_data = []
         self.parsed_train_data = self.parse_file(filename, True)
@@ -234,13 +234,15 @@ class LogParser:
         request = [r for r in request if r is not '']
         method = request[2]
         # URL dir
-        url = request[3]
+        url = request[3] # here
         url_list = url.split("/")
         directory = ''
-        if len(url_list) < 3:
+        if len(url_list) < 3 and len(url_list[1].split(".")) > 1:
             directory = url_list[0]
         else:
             directory = url_list[1]
+        #print(url_list)
+        #print(directory)
         return [ip, method, directory]
 
     def get_combined_strings(self, log):
@@ -311,7 +313,7 @@ class LogParser:
         url = request[3]
         url_list = url.split("/")
         directory = ''
-        if len(url_list) < 3:
+        if len(url_list) < 3 and len(url_list[1].split(".")) > 1:
             directory = url_list[0]
         else:
             directory = url_list[1]
@@ -327,7 +329,7 @@ class LogParser:
         url = request[3]
         url_list = url.split("/")
         directory = ''
-        if len(url_list) < 3:
+        if len(url_list) < 3 and len(url_list[1].split(".")) > 1:
             directory = url_list[0]
         else:
             directory = url_list[1]
@@ -434,6 +436,7 @@ class LogParser:
         length = len(url)
         str_len = str(length)
         self.parse_str_to_dict_freq(self.dict_req_len, self.dict_req_len_freq, str_len, 0)
+
         """
         try:
             if str_len not in self.dict_req_len:
@@ -442,7 +445,10 @@ class LogParser:
             print(e)
             return self.dict_req_len
         """
-        return self.dict_req_len[str_len]
+        try:
+            return self.dict_req_len[str_len]
+        except:
+            return len(self.dict_req_len)
 
 
     """============================== PARSE TO DICT ================================"""
@@ -462,7 +468,8 @@ class LogParser:
                 if len(dictionary) == 0:
                     dictionary[word] = 0
                 else:
-                    dictionary[word] = (int(dictionary[list(dictionary)[len(dictionary)-1]]/step)+1)*step
+                    #dictionary[word] = (int(dictionary[list(dictionary)[len(dictionary)-1]]/step)+1)*step
+                    dictionary[word] = int(dictionary[list(dictionary)[len(dictionary)-1]])+1
         finally:
             return dictionary
 

@@ -23,7 +23,10 @@ def load_data_pandas(filename, is_train, logpar, columns):
     #data_train = logpar.parse_file(filename, is_train) 
     # if test input by console
     data_train = logpar.public_parse_line(filename, is_train)
-    return pd.DataFrame(data_train)[columns]
+    try:
+        return pd.DataFrame(data_train)[columns]
+    except:
+        return None
 
 
 def load_parsed_data(filename, is_train, charac):
