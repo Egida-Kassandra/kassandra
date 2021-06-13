@@ -9,7 +9,7 @@
 
 <br />
 <div align="center">
-  <a href="https://github.com/albact7/kassandra">
+  <a href="https://github.com/Egida-Kassandra/kassandra">
     <img src="img/logo.svg" alt="Logo" width="180" height="180">
   </a>
 
@@ -18,11 +18,11 @@
     <a href="https://egida-kassandra.github.io/kassandra/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/albact7/kassandra">View Source</a>
+    <a href="https://github.com/Egida-Kassandra/kassandra">View Source</a>
     ·
-    <a href="https://github.com/albact7/kassandra/issues">Report Bug</a>
+    <a href="https://github.com/Egida-Kassandra/kassandra/issues">Report Bug</a>
     ·
-    <a href="https://github.com/albact7/kassandra/issues">Request Feature</a>
+    <a href="https://github.com/Egida-Kassandra/kassandra/issues">Request Feature</a>
   </p>
 </div>
 
@@ -69,11 +69,12 @@ Run install.bat
 
 <!-- RUN KASSANDRA -->
 ## Getting started
-To start running Kassandra 0.1 run the following on the root folder of the project.
+To start running Kassandra run the following on the root folder of the project.
 ```bash
 python kassandra.py
 ```
-This will run an example by default.
+This will run an UDP server in localhost:5000, configure your proxy to point to that address.
+
 ### Try on my own
 #### Needed files
 To test Kassandra with you own files you should change [here](https://github.com/albact7/kassandra/blob/master/kassandra.py) the path to those files.
@@ -87,14 +88,10 @@ You can also customize the anomaly values obtained by editing [config.yml](https
 
 <!-- RUNNING TESTS -->
 ## Running tests
-To run any test run the following command, being "test_file" any of the files present on the root folder like "tst_level_*.py".
-
+To run Kassandra with your own requests and test the model, run the following command and introduce the HTTP request corresponding log.
 ```bash
-python filename
+python kassandra-app.py
 ```
-Each test file can be edited to run a different set of HTTP requests, modify the corresponding file name according to:
-* Level 1 tests in [here](https://github.com/albact7/kassandra/tree/master/kass_nn/level_1/test_logs/main)
-* Level 2 tests in [here](https://github.com/albact7/kassandra/tree/master/kass_nn/level_2/test_logs)
 
 ## Run Dockerfile
 
@@ -126,4 +123,4 @@ Authors:
 * [Antonio Payá González](https://antoniopg.tk)
 * [Jose Manuel Redondo Lopez](http://orcid.org/0000-0002-0939-0186)
 
-Project Link: [https://github.com/albact7/kassandra](https://github.com/albact7/kassandra)
+Project Link: [https://github.com/Egida-Kassandra/kassandra](https://github.com/Egida-Kassandra/kassandra)
